@@ -5,7 +5,6 @@ import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.KeyEvent
 import android.view.View.GONE
 import android.view.View.VISIBLE
@@ -16,6 +15,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import com.project.weather.models.WeatherResponse
 import com.project.weather.viewmodel.WeatherViewmodel
@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var locationCallback: LocationCallback
     private lateinit var locationRequest: LocationRequest
     private lateinit var viewmodel: WeatherViewmodel
-    private lateinit var getData: WeatherResponse
+    private lateinit var getData : WeatherResponse
 
     @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("SetTextI18n")
@@ -50,6 +50,7 @@ class MainActivity : AppCompatActivity() {
         locationRequest = LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 5000).build()
         locationFinder()
         requestPermission()
+
 
         binding.searchCity.setOnEditorActionListener { textView, actionId, event ->
             if ((actionId == EditorInfo.IME_ACTION_SEND) ||
@@ -105,10 +106,31 @@ class MainActivity : AppCompatActivity() {
                     var lat = lastLocation.latitude
                     var lon = lastLocation.longitude
                     fetchingData(lat,lon)
-                    Log.d("Location", "$lat | $lon ")
+                    accurateLocation("$lon,$lat")
                     fusedLocationClient.removeLocationUpdates(this)
                 }
             }
+        }
+    }
+
+    private fun takeStateData(cityName: String){
+        viewmodel.fetchStateName(cityName)
+        viewmodel.stateName.observe(this) {response ->
+            binding.stateName.text = response[0].state
+        }
+        viewmodel.stateNameError.observe(this) { error ->
+            Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun accurateLocation(location: String){
+        viewmodel.getReverseApiData(location,this)
+        viewmodel.reverseResponse.observe(this) {reverseResponse ->
+            var state = reverseResponse.results.firstOrNull()?.components?.state
+                Toast.makeText(this, state, Toast.LENGTH_SHORT).show()
+        }
+        viewmodel.reverseError.observe(this) {reverseError ->
+            Toast.makeText(this, reverseError, Toast.LENGTH_LONG).show()
         }
     }
 
@@ -121,6 +143,7 @@ class MainActivity : AppCompatActivity() {
             updateUI(getData)
             weatherDetection(getData)
             weatherIconChanger(getData)
+            takeStateData(getData.name)
             binding.loadingbar.visibility = GONE
         }
         viewmodel.error.observe(this) {error ->
@@ -138,6 +161,7 @@ class MainActivity : AppCompatActivity() {
             updateUI(getData)
             weatherDetection(getData)
             weatherIconChanger(getData)
+            takeStateData(getData.name)
             binding.loadingbar.visibility = GONE
             binding.searchCity.text.clear()
         }
@@ -149,7 +173,7 @@ class MainActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("SetTextI18n")
     private fun updateUI(getData: WeatherResponse) {
-        binding.cityName.text = getData.name
+        binding.cityName.text = "${getData.name}, "
         binding.mainTemp.text = kelvinToCelsius(getData.main.temp).toString() + "°C"
         binding.maxandminTemp.text = "Max " + kelvinToCelsius(getData.main.temp_max) + "°C" + " | " +
                                         "Min " + kelvinToCelsius(getData.main.temp_min) + "°C"
