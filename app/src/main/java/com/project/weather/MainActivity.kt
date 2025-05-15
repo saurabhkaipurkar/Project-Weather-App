@@ -24,7 +24,10 @@ import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
+import com.project.weather.apiservices.RetrofitInstance
 import com.project.weather.databinding.ActivityMainBinding
+import com.project.weather.repository.WeatherRepository
+import com.project.weather.viewmodel.WeatherViewmodelFactory
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -44,7 +47,9 @@ class MainActivity : AppCompatActivity() {
         enableEdgeToEdge()
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        viewmodel = ViewModelProvider(this)[WeatherViewmodel::class.java]
+        val repository = WeatherRepository(RetrofitInstance.retrofit)
+        val factory = WeatherViewmodelFactory(repository)
+        viewmodel = ViewModelProvider(this, factory)[WeatherViewmodel::class.java]
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         locationRequest = LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 5000).build()
         locationFinder()

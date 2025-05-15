@@ -12,9 +12,7 @@ import com.project.weather.models.WeatherResponse
 import com.project.weather.repository.WeatherRepository
 import kotlinx.coroutines.launch
 
-class WeatherViewmodel : ViewModel() {
-
-    private val repository = WeatherRepository()
+class WeatherViewmodel(private val repository: WeatherRepository) : ViewModel() {
 
     private val _response = MutableLiveData<WeatherResponse>()
     val response: LiveData<WeatherResponse> = _response
