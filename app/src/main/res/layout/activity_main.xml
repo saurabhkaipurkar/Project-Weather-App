@@ -14,7 +14,7 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="24dp"
         android:hint="@string/enter_city"
         android:textColorHint="@color/text_color"
         app:boxCornerRadiusTopStart="8dp"
@@ -22,10 +22,10 @@
         app:boxCornerRadiusBottomStart="8dp"
         app:boxCornerRadiusBottomEnd="8dp"
         app:boxStrokeColor="@color/persistence_stroke_color"
+        app:boxBackgroundColor="@color/color_background_color"
         app:boxStrokeWidth="1dp"
         app:endIconDrawable="@drawable/search_icon"
         app:endIconMode="custom"
-        app:boxBackgroundColor="@color/color_background_color"
         app:startIconDrawable="@drawable/app_location_icon"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -35,6 +35,9 @@
             android:id="@+id/searchCity"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:paddingStart="50dp"
+            android:paddingEnd="50dp"
             android:autofillHints="name"
             android:imeOptions="actionSend"
             android:inputType="textCapWords|textAutoComplete"
@@ -54,7 +57,7 @@
         app:cardBackgroundColor="@color/transparent"
         app:cardElevation="6dp"
         app:strokeColor="@color/stroke_color"
-        app:strokeWidth="0.5dp"
+        app:strokeWidth="1dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/searchContainer">
@@ -175,7 +178,7 @@
         app:cardCornerRadius="16dp"
         app:cardElevation="4dp"
         app:strokeColor="@color/stroke_color"
-        app:strokeWidth="0.5dp"
+        app:strokeWidth="1dp"
         app:cardBackgroundColor="@color/transparent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -207,14 +210,15 @@
                     app:layout_gravity="fill"
                     app:layout_rowWeight="1"
                     app:strokeColor="@color/stroke_color"
-                    app:strokeWidth="0.5dp">
+                    app:strokeWidth="1dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:orientation="horizontal"
-                        android:padding="8dp">
+                        android:padding="8dp"
+                        tools:ignore="UseCompoundDrawables">
 
                         <ImageView
                             android:id="@+id/cloudsIcon"
@@ -246,14 +250,15 @@
                     app:layout_gravity="fill"
                     app:layout_rowWeight="1"
                     app:strokeColor="@color/stroke_color"
-                    app:strokeWidth="0.5dp">
+                    app:strokeWidth="1dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:orientation="horizontal"
-                        android:padding="8dp">
+                        android:padding="8dp"
+                        tools:ignore="UseCompoundDrawables">
 
                         <ImageView
                             android:id="@+id/humidityIcon"
@@ -285,14 +290,15 @@
                     app:layout_gravity="fill"
                     app:layout_rowWeight="1"
                     app:strokeColor="@color/stroke_color"
-                    app:strokeWidth="0.5dp">
+                    app:strokeWidth="1dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:orientation="horizontal"
-                        android:padding="8dp">
+                        android:padding="8dp"
+                        tools:ignore="UseCompoundDrawables">
 
                         <ImageView
                             android:id="@+id/windIcon"
@@ -324,14 +330,15 @@
                     app:layout_gravity="fill"
                     app:layout_rowWeight="1"
                     app:strokeColor="@color/stroke_color"
-                    app:strokeWidth="0.5dp">
+                    app:strokeWidth="1dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:orientation="horizontal"
-                        android:padding="8dp">
+                        android:padding="8dp"
+                        tools:ignore="UseCompoundDrawables">
 
                         <ImageView
                             android:id="@+id/visibilityIcon"
@@ -363,14 +370,15 @@
                     app:layout_gravity="fill"
                     app:layout_rowWeight="1"
                     app:strokeColor="@color/stroke_color"
-                    app:strokeWidth="0.5dp">
+                    app:strokeWidth="1dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:orientation="horizontal"
-                        android:padding="8dp">
+                        android:padding="8dp"
+                        tools:ignore="UseCompoundDrawables">
 
                         <ImageView
                             android:id="@+id/sunriseIcon"
@@ -402,14 +410,15 @@
                     app:layout_gravity="fill"
                     app:layout_rowWeight="1"
                     app:strokeColor="@color/stroke_color"
-                    app:strokeWidth="0.5dp">
+                    app:strokeWidth="1dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:orientation="horizontal"
-                        android:padding="8dp">
+                        android:padding="8dp"
+                        tools:ignore="UseCompoundDrawables">
 
                         <ImageView
                             android:id="@+id/sunsetIcon"
@@ -441,14 +450,15 @@
                     app:layout_gravity="fill"
                     app:layout_rowWeight="1"
                     app:strokeColor="@color/stroke_color"
-                    app:strokeWidth="0.5dp">
+                    app:strokeWidth="1dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:orientation="horizontal"
-                        android:padding="8dp">
+                        android:padding="8dp"
+                        tools:ignore="UseCompoundDrawables">
 
                         <ImageView
                             android:id="@+id/pressureIcon"
@@ -480,14 +490,15 @@
                     app:layout_gravity="fill"
                     app:layout_rowWeight="1"
                     app:strokeColor="@color/stroke_color"
-                    app:strokeWidth="0.5dp">
+                    app:strokeWidth="1dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:orientation="horizontal"
-                        android:padding="8dp">
+                        android:padding="8dp"
+                        tools:ignore="UseCompoundDrawables">
 
                         <ImageView
                             android:id="@+id/timezoneIcon"
@@ -517,7 +528,6 @@
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
