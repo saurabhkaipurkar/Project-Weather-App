@@ -24,6 +24,6 @@ class WeatherRepository(private val apiService: ApiServices) {
     }
 
     suspend fun getCityData(city: String): List<GeocodingResponse>{
-        return apiService.FetchStateName(city, apikey)
+        return apiService.fetchStateName(city, apikey)
     }
 }

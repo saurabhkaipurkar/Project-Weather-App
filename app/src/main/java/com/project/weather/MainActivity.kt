@@ -55,7 +55,6 @@ class MainActivity : AppCompatActivity() {
         locationFinder()
         requestPermission()
 
-
         binding.searchCity.setOnEditorActionListener { textView, actionId, event ->
             if ((actionId == EditorInfo.IME_ACTION_SEND) ||
                 (actionId == EditorInfo.IME_ACTION_SEARCH) ||
@@ -210,19 +209,20 @@ class MainActivity : AppCompatActivity() {
 
     private fun weatherDetection(getData: WeatherResponse){
         val weather = when (getData.weather[0].main){
-            "Clouds" -> R.drawable.cloudy_weather
+            "Clouds" -> R.drawable.cloudy_wallpaper
             "Clear" -> R.drawable.clear_weather
-            "Rain" -> R.drawable.heavyrain_weather
-            "Snow" -> R.drawable.snowy_weather
-            "Thunderstorm" -> R.drawable.thunderstorm_weather
-            "LightRain" -> R.drawable.lightrain_weather
-            else -> R.drawable.ic_launcher_foreground
+            "Rain" -> R.drawable.rain_wallpaper
+            "Snow" -> R.drawable.snowy_wallpaper
+            "Thunderstorm" -> R.drawable.thunderstorm_wallpaper
+            "Haze" -> R.drawable.haze_wallpaper
+            "Mist" -> R.drawable.mist_wallpaper
+            else -> R.drawable.clear_weather
         }
         binding.main.setBackgroundResource(weather)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun timeStampConvertor(timeStamp: Long): String{
+    private fun timeStampConvertor(timeStamp: Long): String {
         var sourceZone = ZoneId.of("UTC")
         var targetZone = ZoneId.of("Asia/Kolkata")
         var sourceTimeStamp = Instant.ofEpochSecond(timeStamp).atZone(sourceZone)

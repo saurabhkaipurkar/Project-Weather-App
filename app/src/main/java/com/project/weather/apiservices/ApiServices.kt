@@ -21,7 +21,7 @@ interface ApiServices {
     ): WeatherResponse
 
     @GET("geo/1.0/direct")
-    suspend fun FetchStateName(
+    suspend fun fetchStateName(
         @Query("q") city: String,
         @Query("appid") apiKey: String
     ): List<GeocodingResponse>
