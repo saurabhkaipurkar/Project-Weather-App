@@ -58,4 +58,6 @@ dependencies {
     implementation (libs.androidx.lifecycle.viewmodel.ktx)
     implementation (libs.androidx.lifecycle.livedata.ktx)
     implementation(libs.logging.interceptor)
+    implementation (libs.androidx.gridlayout)
+    implementation (libs.material.v160)  // or latest version
 }

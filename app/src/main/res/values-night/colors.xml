@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FFFFFF</color> <!-- Changed to white for contrast -->
+    <color name="white">#000000</color> <!-- Changed to black for dark bg -->
+    <color name="red">#FF6E6E</color> <!-- Softer red for dark mode -->
+    <color name="grey">#80CCCCCC</color> <!-- Lighter grey -->
+    <color name="dark_grey">#B0B0B0</color> <!-- Lightened for visibility -->
+    <color name="bg_blue">#803B8AFF</color> <!-- Muted but visible blue -->
+    <color name="edittext_bg">#333333</color> <!-- Darker bg for text input -->
+    <color name="transparent">#00000000</color> <!-- Fully transparent -->
+    <color name="my_light_primary">#30C8FF</color> <!-- Muted light primary -->
+    <color name="my_dark_primary">#0A7CA5</color> <!-- Slightly lighter -->
+    <color name="stroke_color">#0A7CA5</color> <!-- Slightly lighter for stroke -->
+    <color name="color_background_color">#000000</color>
+    <color name="text_color">#FFFFFF</color>
+</resources>
