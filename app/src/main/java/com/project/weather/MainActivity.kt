@@ -60,12 +60,16 @@ class MainActivity : AppCompatActivity() {
                 (actionId == EditorInfo.IME_ACTION_SEARCH) ||
                 ((event != null) && (event.keyCode == KeyEvent.KEYCODE_ENTER) && (event.action == KeyEvent.ACTION_DOWN))
             ) {
-                val cityName = binding.searchCity.text.toString().trim()
-                postCity(cityName)
+                val cityName = binding.searchCity.text?.trim().toString()
+                if (cityName.isNotEmpty()) {
+                    postCity(cityName)
+                }else{
+                    Toast.makeText(this, "Please Enter City Name", Toast.LENGTH_SHORT).show()
+                }
 
                 true
             }else{
-                true
+                false
             }
         }
     }
