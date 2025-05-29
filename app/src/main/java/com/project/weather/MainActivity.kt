@@ -166,7 +166,7 @@ class MainActivity : AppCompatActivity() {
             weatherIconChanger(getData)
             takeStateData(getData.name)
             binding.loadingbar.visibility = GONE
-            binding.searchCity.text.clear()
+            binding.searchCity.text?.clear()
         }
         viewmodel.cityError.observe(this) {cityError ->
             binding.loadingbar.visibility = GONE

@@ -31,7 +31,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <AutoCompleteTextView
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/searchCity"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -42,8 +42,7 @@
             android:imeOptions="actionSend"
             android:inputType="textCapWords|textAutoComplete"
             android:minHeight="48dp"
-            android:textColor="@color/text_color"
-            tools:ignore="LabelFor" />
+            android:textColor="@color/text_color"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <!-- Current Weather Section - Improved card with better spacing -->
@@ -178,8 +177,8 @@
         app:cardCornerRadius="16dp"
         app:cardElevation="4dp"
         app:strokeColor="@color/stroke_color"
-        app:strokeWidth="1dp"
         app:cardBackgroundColor="@color/transparent"
+        app:strokeWidth="1dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -205,6 +204,7 @@
                     android:layout_margin="4dp"
                     app:cardCornerRadius="12dp"
                     app:cardElevation="2dp"
+                    app:cardBackgroundColor="@color/transparent"
                     app:cardPreventCornerOverlap="false"
                     app:layout_columnWeight="1"
                     app:layout_gravity="fill"
@@ -245,6 +245,7 @@
                     android:layout_margin="4dp"
                     app:cardCornerRadius="12dp"
                     app:cardElevation="2dp"
+                    app:cardBackgroundColor="@color/transparent"
                     app:cardPreventCornerOverlap="false"
                     app:layout_columnWeight="1"
                     app:layout_gravity="fill"
@@ -285,6 +286,7 @@
                     android:layout_margin="4dp"
                     app:cardCornerRadius="12dp"
                     app:cardElevation="2dp"
+                    app:cardBackgroundColor="@color/transparent"
                     app:cardPreventCornerOverlap="false"
                     app:layout_columnWeight="1"
                     app:layout_gravity="fill"
@@ -325,6 +327,7 @@
                     android:layout_margin="4dp"
                     app:cardCornerRadius="12dp"
                     app:cardElevation="2dp"
+                    app:cardBackgroundColor="@color/transparent"
                     app:cardPreventCornerOverlap="false"
                     app:layout_columnWeight="1"
                     app:layout_gravity="fill"
@@ -365,6 +368,7 @@
                     android:layout_margin="4dp"
                     app:cardCornerRadius="12dp"
                     app:cardElevation="2dp"
+                    app:cardBackgroundColor="@color/transparent"
                     app:cardPreventCornerOverlap="false"
                     app:layout_columnWeight="1"
                     app:layout_gravity="fill"
@@ -406,6 +410,7 @@
                     app:cardCornerRadius="12dp"
                     app:cardElevation="2dp"
                     app:cardPreventCornerOverlap="false"
+                    app:cardBackgroundColor="@color/transparent"
                     app:layout_columnWeight="1"
                     app:layout_gravity="fill"
                     app:layout_rowWeight="1"
@@ -446,6 +451,7 @@
                     app:cardCornerRadius="12dp"
                     app:cardElevation="2dp"
                     app:cardPreventCornerOverlap="false"
+                    app:cardBackgroundColor="@color/transparent"
                     app:layout_columnWeight="1"
                     app:layout_gravity="fill"
                     app:layout_rowWeight="1"
@@ -486,6 +492,7 @@
                     app:cardCornerRadius="12dp"
                     app:cardElevation="2dp"
                     app:cardPreventCornerOverlap="false"
+                    app:cardBackgroundColor="@color/transparent"
                     app:layout_columnWeight="1"
                     app:layout_gravity="fill"
                     app:layout_rowWeight="1"
