@@ -20,5 +20,5 @@
     <string name="pressure">Pressure</string>
     <string name="timezone">TimeZone</string>
     <string name="weather_img">Weather_Img</string>
-    <string name="statename">StateName</string>
+    <string name="stateName">State</string>
 </resources>
