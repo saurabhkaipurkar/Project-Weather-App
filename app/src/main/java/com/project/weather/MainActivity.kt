@@ -41,7 +41,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var getData : WeatherResponse
 
     @RequiresApi(Build.VERSION_CODES.O)
-    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -113,7 +112,6 @@ class MainActivity : AppCompatActivity() {
                     var lat = lastLocation.latitude
                     var lon = lastLocation.longitude
                     fetchingData(lat,lon)
-                    accurateLocation("$lon,$lat")
                     fusedLocationClient.removeLocationUpdates(this)
                 }
             }
@@ -125,19 +123,8 @@ class MainActivity : AppCompatActivity() {
         viewmodel.stateName.observe(this) {response ->
             binding.stateName.text = response[0].state
         }
-        viewmodel.stateNameError.observe(this) { error ->
+        viewmodel.error.observe(this) { error ->
             Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
-        }
-    }
-
-    private fun accurateLocation(location: String){
-        viewmodel.getReverseApiData(location,this)
-        viewmodel.reverseResponse.observe(this) {reverseResponse ->
-            var state = reverseResponse.results.firstOrNull()?.components?.state
-                Toast.makeText(this, state, Toast.LENGTH_SHORT).show()
-        }
-        viewmodel.reverseError.observe(this) {reverseError ->
-            Toast.makeText(this, reverseError, Toast.LENGTH_LONG).show()
         }
     }
 
@@ -172,7 +159,7 @@ class MainActivity : AppCompatActivity() {
             binding.loadingbar.visibility = GONE
             binding.searchCity.text?.clear()
         }
-        viewmodel.cityError.observe(this) {cityError ->
+        viewmodel.error.observe(this) {cityError ->
             binding.loadingbar.visibility = GONE
         }
     }

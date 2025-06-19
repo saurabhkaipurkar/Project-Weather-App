@@ -9,10 +9,6 @@ object RetrofitInstance {
 
     private const val BASEURL ="https://api.openweathermap.org/"
 
-    private const val REVERSEBASEURL = "https://api.opencagedata.com/"
-
-    private val GEOCODING_URL= "https://api.openweathermap.org/geo/1.0/"
-
 
     val client = OkHttpClient.Builder()
         .addInterceptor(HttpLoggingInterceptor().apply {
@@ -27,25 +23,4 @@ object RetrofitInstance {
             .build()
             .create(ApiServices::class.java)
     }
-
-    val reverseApi: ReverseApiService by lazy {
-        Retrofit.Builder()
-            .baseUrl(REVERSEBASEURL)
-            .client(client)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-            .create(ReverseApiService::class.java)
-    }
-
-    val geocoding: ApiServices by lazy {
-        Retrofit.Builder()
-            .baseUrl(GEOCODING_URL)
-            .client(client)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-            .create(ApiServices::class.java)
-    }
-
-
-
 }
