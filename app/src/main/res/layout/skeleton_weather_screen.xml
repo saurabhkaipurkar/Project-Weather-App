@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.facebook.shimmer.ShimmerFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/shimmerLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/gradient_background"
+    android:padding="20dp"
+    app:shimmer_auto_start="true"
+    app:shimmer_duration="1700">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!-- Fake Search Bar -->
+        <View
+            android:id="@+id/fakeSearch"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:background="@drawable/skeleton_placeholder"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <!-- Fake Weather Card -->
+        <View
+            android:id="@+id/fakeWeatherCard"
+            android:layout_width="0dp"
+            android:layout_height="180dp"
+            android:layout_marginTop="28dp"
+            android:background="@drawable/skeleton_placeholder"
+            app:layout_constraintTop_toBottomOf="@id/fakeSearch"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <!-- Fake Grid Card -->
+        <View
+            android:id="@+id/fakeGridCard"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/skeleton_placeholder"
+            app:layout_constraintTop_toBottomOf="@id/fakeWeatherCard"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.facebook.shimmer.ShimmerFrameLayout>

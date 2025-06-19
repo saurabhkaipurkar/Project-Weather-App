@@ -16,6 +16,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModelProvider
+import com.facebook.shimmer.ShimmerFrameLayout
 import com.project.weather.models.WeatherResponse
 import com.project.weather.viewmodel.WeatherViewmodel
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -39,6 +40,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var locationRequest: LocationRequest
     private lateinit var viewmodel: WeatherViewmodel
     private lateinit var getData : WeatherResponse
+    private lateinit var shimmerLayout : ShimmerFrameLayout
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,6 +48,8 @@ class MainActivity : AppCompatActivity() {
         enableEdgeToEdge()
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        shimmerLayout = findViewById(R.id.shimmerLayout) // or use binding if included
+        shimmerLayout.startShimmer()
         val repository = WeatherRepository(RetrofitInstance.retrofit)
         val factory = WeatherViewmodelFactory(repository)
         viewmodel = ViewModelProvider(this, factory)[WeatherViewmodel::class.java]
@@ -121,6 +125,9 @@ class MainActivity : AppCompatActivity() {
     private fun takeStateData(cityName: String){
         viewmodel.fetchStateName(cityName)
         viewmodel.stateName.observe(this) {response ->
+            shimmerLayout.stopShimmer()
+            shimmerLayout.visibility = GONE
+            binding.mainlayout.visibility = VISIBLE
             binding.stateName.text = response[0].state
         }
         viewmodel.error.observe(this) { error ->
@@ -133,6 +140,9 @@ class MainActivity : AppCompatActivity() {
         binding.loadingbar.visibility = VISIBLE
         viewmodel.getWeatherData(lat,lon)
         viewmodel.response.observe(this) {response ->
+            shimmerLayout.stopShimmer()
+            shimmerLayout.visibility = GONE
+            binding.mainlayout.visibility = VISIBLE
             getData = response
             updateUI(getData)
             weatherDetection(getData)
@@ -151,6 +161,9 @@ class MainActivity : AppCompatActivity() {
         viewmodel.getCityWeatherData(cityName)
         binding.loadingbar.visibility = VISIBLE
         viewmodel.cityResponse.observe(this) {cityResponse ->
+            shimmerLayout.stopShimmer()
+            shimmerLayout.visibility = GONE
+            binding.mainlayout.visibility = VISIBLE
             getData = cityResponse
             updateUI(getData)
             weatherDetection(getData)
@@ -195,6 +208,7 @@ class MainActivity : AppCompatActivity() {
             "Thunderstorm" -> R.drawable.thunderstorm
             else -> R.drawable.sun
         }
+        binding.weathericon.visibility = VISIBLE
         binding.weathericon.setImageResource(weatherIcon)
     }
 

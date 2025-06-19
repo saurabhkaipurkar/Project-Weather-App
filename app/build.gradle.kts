@@ -60,4 +60,6 @@ dependencies {
     implementation(libs.logging.interceptor)
     implementation (libs.androidx.gridlayout)
     implementation (libs.material.v160)  // or latest version
+
+    implementation (libs.shimmer)
 }
