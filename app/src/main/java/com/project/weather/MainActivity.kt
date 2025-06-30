@@ -141,7 +141,7 @@ class MainActivity : AppCompatActivity() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun fetchingData(lat: Double, lon: Double){
-
+        
         viewmodel.getWeatherData(lat,lon)
         viewmodel.response.observe(this) {response ->
             shimmerLayout.stopShimmer()
@@ -149,7 +149,6 @@ class MainActivity : AppCompatActivity() {
             binding.mainlayout.visibility = VISIBLE
             getData = response
             updateUI(getData)
-            weatherDetection(getData)
             weatherIconChanger(getData)
             takeStateData(getData.name)
         }
@@ -167,7 +166,6 @@ class MainActivity : AppCompatActivity() {
             binding.mainlayout.visibility = VISIBLE
             getData = cityResponse
             updateUI(getData)
-            weatherDetection(getData)
             weatherIconChanger(getData)
             takeStateData(getData.name)
             binding.searchCity.text?.clear()
@@ -207,7 +205,7 @@ class MainActivity : AppCompatActivity() {
         binding.sunsetValue.text = toolbox.timeStampConvertor(getData.sys.sunset)
         binding.visibilityValue.text = "${getData.visibility/1000} Km"
         binding.timeofdata.text = toolbox.timeStampConvertor(getData.dt)
-        binding.windspeed.text = "${getData.wind.speed} m/s"
+        binding.windspeed.text = "${getData.wind.speed * 3.6} km/h"
         binding.pressureValue.text = getData.main.pressure.toString()
     }
     private fun weatherIconChanger(getData: WeatherResponse){
@@ -221,18 +219,5 @@ class MainActivity : AppCompatActivity() {
         }
         binding.weathericon.visibility = VISIBLE
         binding.weathericon.setImageResource(weatherIcon)
-    }
-    fun weatherDetection(getData: WeatherResponse){
-        val weather = when (getData.weather[0].main){
-            "Clouds" -> R.drawable.cloudy_wallpaper
-            "Clear" -> R.drawable.clear_weather
-            "Rain" -> R.drawable.rain_wallpaper
-            "Snow" -> R.drawable.snowy_wallpaper
-            "Thunderstorm" -> R.drawable.thunderstorm_wallpaper
-            "Haze" -> R.drawable.haze_wallpaper
-            "Mist" -> R.drawable.mist_wallpaper
-            else -> R.drawable.clear_weather
-        }
-        binding.main.setBackgroundResource(weather)
     }
 }

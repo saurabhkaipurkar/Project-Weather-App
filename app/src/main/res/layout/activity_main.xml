@@ -26,7 +26,7 @@
                 android:id="@+id/main"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/gradient_background"
+                android:background="@color/color_background_color"
                 android:padding="12dp">
 
                 <!-- Enhanced Search Section with Glass Morphism Effect -->
@@ -216,9 +216,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:layout_marginHorizontal="12dp"
-                    app:cardCornerRadius="28dp"
-                    app:cardElevation="8dp"
+                    app:cardCornerRadius="24dp"
+                    app:cardElevation="12dp"
                     app:strokeColor="@color/card_stroke_color"
                     app:strokeWidth="1dp"
                     app:cardBackgroundColor="@color/color_background_color"
@@ -248,7 +247,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
-                            android:padding="10dp"
                             android:nestedScrollingEnabled="false"
                             android:overScrollMode="never"
                             android:scrollbars="horizontal"/>
@@ -261,8 +259,7 @@
                     android:layout_marginTop="20dp"
                     app:cardCornerRadius="24dp"
                     app:cardElevation="8dp"
-                    app:strokeColor="@color/glass_border_color"
-                    app:cardBackgroundColor="@color/glass_background_color"
+                    app:strokeColor="@color/card_stroke_color"
                     app:strokeWidth="1dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -274,6 +271,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:padding="16dp"
+                        android:background="@color/color_background_color"
                         app:columnCount="2"
                         app:rowCount="4">
 
