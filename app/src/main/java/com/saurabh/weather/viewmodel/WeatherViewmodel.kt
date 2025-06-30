@@ -1,13 +1,13 @@
-package com.project.weather.viewmodel
+package com.saurabh.weather.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.project.weather.models.ForecastResponse
-import com.project.weather.models.GeocodingResponse
-import com.project.weather.models.WeatherResponse
-import com.project.weather.repository.WeatherRepository
+import com.saurabh.weather.models.ForecastResponse
+import com.saurabh.weather.models.GeocodingResponse
+import com.saurabh.weather.models.WeatherResponse
+import com.saurabh.weather.repository.WeatherRepository
 import kotlinx.coroutines.launch
 
 class WeatherViewmodel(private val repository: WeatherRepository) : ViewModel() {

@@ -1,13 +1,13 @@
-package com.project.weather
+package com.saurabh.weather.activities
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Build
 import android.os.Bundle
 import android.view.KeyEvent
-import android.view.View.GONE
-import android.view.View.VISIBLE
+import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -18,19 +18,21 @@ import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.facebook.shimmer.ShimmerFrameLayout
-import com.project.weather.models.WeatherResponse
-import com.project.weather.viewmodel.WeatherViewmodel
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
-import com.project.weather.adapters.WeatherForecastAdapter
-import com.project.weather.apiservices.RetrofitInstance
-import com.project.weather.databinding.ActivityMainBinding
-import com.project.weather.repository.WeatherRepository
-import com.project.weather.viewmodel.WeatherViewmodelFactory
+import com.saurabh.weather.R
+import com.saurabh.weather.adapters.WeatherForecastAdapter
+import com.saurabh.weather.apiservices.RetrofitInstance
+import com.saurabh.weather.databinding.ActivityMainBinding
+import com.saurabh.weather.models.WeatherResponse
+import com.saurabh.weather.repository.WeatherRepository
+import com.saurabh.weather.utils.MethodLibrary
+import com.saurabh.weather.viewmodel.WeatherViewmodel
+import com.saurabh.weather.viewmodel.WeatherViewmodelFactory
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -82,8 +84,8 @@ class MainActivity : AppCompatActivity() {
 
     private val requestPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
-            if (permissions[android.Manifest.permission.ACCESS_FINE_LOCATION] == true ||
-                permissions[android.Manifest.permission.ACCESS_COARSE_LOCATION] == true) {
+            if (permissions[Manifest.permission.ACCESS_FINE_LOCATION] == true ||
+                permissions[Manifest.permission.ACCESS_COARSE_LOCATION] == true) {
                 getUserLocation()
                 Toast.makeText(this, "Permission Granted", Toast.LENGTH_LONG).show()
             } else {
@@ -92,10 +94,10 @@ class MainActivity : AppCompatActivity() {
         }
 
     private fun requestPermission(){
-        if(ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-            ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED){
+        if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+            ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED){
             requestPermissionLauncher.launch(
-                arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION)
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)
             )
         }else{
             getUserLocation()
@@ -103,8 +105,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun getUserLocation(){
-        if(ActivityCompat.checkSelfPermission(this,android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
-            ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+        if(ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+            ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED){
             fusedLocationClient.requestLocationUpdates(locationRequest,locationCallback,mainLooper)
         }
     }
@@ -130,8 +133,8 @@ class MainActivity : AppCompatActivity() {
         viewmodel.fetchStateName(cityName)
         viewmodel.stateName.observe(this) {response ->
             shimmerLayout.stopShimmer()
-            shimmerLayout.visibility = GONE
-            binding.mainlayout.visibility = VISIBLE
+            shimmerLayout.visibility = View.GONE
+            binding.mainlayout.visibility = View.VISIBLE
             binding.stateName.text = response[0].state
         }
         viewmodel.error.observe(this) { error ->
@@ -141,12 +144,12 @@ class MainActivity : AppCompatActivity() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun fetchingData(lat: Double, lon: Double){
-        
+
         viewmodel.getWeatherData(lat,lon)
         viewmodel.response.observe(this) {response ->
             shimmerLayout.stopShimmer()
-            shimmerLayout.visibility = GONE
-            binding.mainlayout.visibility = VISIBLE
+            shimmerLayout.visibility = View.GONE
+            binding.mainlayout.visibility = View.VISIBLE
             getData = response
             updateUI(getData)
             weatherIconChanger(getData)
@@ -162,8 +165,8 @@ class MainActivity : AppCompatActivity() {
         viewmodel.getCityWeatherData(cityName)
         viewmodel.cityResponse.observe(this) {cityResponse ->
             shimmerLayout.stopShimmer()
-            shimmerLayout.visibility = GONE
-            binding.mainlayout.visibility = VISIBLE
+            shimmerLayout.visibility = View.GONE
+            binding.mainlayout.visibility = View.VISIBLE
             getData = cityResponse
             updateUI(getData)
             weatherIconChanger(getData)
@@ -178,10 +181,11 @@ class MainActivity : AppCompatActivity() {
         viewmodel.fetchForecast(lat,lon)
         viewmodel.forecast.observe(this) { response ->
             shimmerLayout.stopShimmer()
-            shimmerLayout.visibility = GONE
-            binding.mainlayout.visibility = VISIBLE
+            shimmerLayout.visibility = View.GONE
+            binding.mainlayout.visibility = View.VISIBLE
             adapter = WeatherForecastAdapter(response)
-            binding.forecastHour.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+            binding.forecastHour.layoutManager =
+                LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
             binding.forecastHour.adapter = adapter
 
         }
@@ -217,7 +221,7 @@ class MainActivity : AppCompatActivity() {
             "Thunderstorm" -> R.drawable.thunderstorm
             else -> R.drawable.sun
         }
-        binding.weathericon.visibility = VISIBLE
+        binding.weathericon.visibility = View.VISIBLE
         binding.weathericon.setImageResource(weatherIcon)
     }
 }

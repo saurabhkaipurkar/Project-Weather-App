@@ -1,8 +1,8 @@
-package com.project.weather.viewmodel
+package com.saurabh.weather.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.project.weather.repository.WeatherRepository
+import com.saurabh.weather.repository.WeatherRepository
 
 class WeatherViewmodelFactory(private val repository: WeatherRepository) : ViewModelProvider.Factory {
 

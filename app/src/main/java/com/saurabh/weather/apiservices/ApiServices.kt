@@ -1,8 +1,8 @@
-package com.project.weather.apiservices
+package com.saurabh.weather.apiservices
 
-import com.project.weather.models.ForecastResponse
-import com.project.weather.models.GeocodingResponse
-import com.project.weather.models.WeatherResponse
+import com.saurabh.weather.models.ForecastResponse
+import com.saurabh.weather.models.GeocodingResponse
+import com.saurabh.weather.models.WeatherResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
 

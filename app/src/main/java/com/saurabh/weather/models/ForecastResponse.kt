@@ -1,4 +1,4 @@
-package com.project.weather.models
+package com.saurabh.weather.models
 
 import com.google.gson.annotations.SerializedName
 data class ForecastResponse(

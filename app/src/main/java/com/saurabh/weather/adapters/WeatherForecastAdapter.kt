@@ -1,4 +1,4 @@
-package com.project.weather.adapters
+package com.saurabh.weather.adapters
 
 import android.os.Build
 import android.view.LayoutInflater
@@ -8,9 +8,9 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
-import com.project.weather.MethodLibrary
-import com.project.weather.R
-import com.project.weather.models.ForecastResponse
+import com.saurabh.weather.utils.MethodLibrary
+import com.saurabh.weather.R
+import com.saurabh.weather.models.ForecastResponse
 
 class WeatherForecastAdapter(private val data: ForecastResponse
 ) : RecyclerView.Adapter<WeatherForecastAdapter.WeatherForecastViewHolder>() {

@@ -1,4 +1,4 @@
-package com.project.weather
+package com.saurabh.weather
 
 import org.junit.Test
 

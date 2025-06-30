@@ -1,4 +1,4 @@
-package com.project.weather.apiservices
+package com.saurabh.weather.apiservices
 
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor

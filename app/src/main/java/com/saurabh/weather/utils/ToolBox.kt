@@ -1,10 +1,7 @@
-package com.project.weather
+package com.saurabh.weather.utils
 
 import android.os.Build
-import android.view.View.VISIBLE
 import androidx.annotation.RequiresApi
-import com.project.weather.databinding.ActivityMainBinding
-import com.project.weather.models.WeatherResponse
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter

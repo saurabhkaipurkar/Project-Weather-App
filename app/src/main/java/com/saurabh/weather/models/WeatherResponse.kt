@@ -1,4 +1,4 @@
-package com.project.weather.models
+package com.saurabh.weather.models
 
 data class WeatherResponse(
     val coord: Coord,

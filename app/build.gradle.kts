@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.project.weather"
-    compileSdk = 35
+    namespace = "com.saurabh.weather"
+    compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.project.weather"
+        applicationId = "com.saurabh.weather"
         minSdk = 24
         targetSdk = 35
         versionCode = 1

@@ -22,7 +22,7 @@
         android:usesCleartextTraffic="true"
         android:allowClearUserData="true">
         <activity
-            android:name=".MainActivity"
+            android:name="com.saurabh.weather.activities.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
