@@ -16,6 +16,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.facebook.shimmer.ShimmerFrameLayout
 import com.project.weather.models.WeatherResponse
 import com.project.weather.viewmodel.WeatherViewmodel
@@ -25,13 +26,11 @@ import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
+import com.project.weather.adapters.WeatherForecastAdapter
 import com.project.weather.apiservices.RetrofitInstance
 import com.project.weather.databinding.ActivityMainBinding
 import com.project.weather.repository.WeatherRepository
 import com.project.weather.viewmodel.WeatherViewmodelFactory
-import java.time.Instant
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -41,6 +40,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var viewmodel: WeatherViewmodel
     private lateinit var getData : WeatherResponse
     private lateinit var shimmerLayout : ShimmerFrameLayout
+    private lateinit var adapter : WeatherForecastAdapter
+    private val toolbox = MethodLibrary()
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,8 +49,10 @@ class MainActivity : AppCompatActivity() {
         enableEdgeToEdge()
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
         shimmerLayout = findViewById(R.id.shimmerLayout) // or use binding if included
         shimmerLayout.startShimmer()
+
         val repository = WeatherRepository(RetrofitInstance.retrofit)
         val factory = WeatherViewmodelFactory(repository)
         viewmodel = ViewModelProvider(this, factory)[WeatherViewmodel::class.java]
@@ -113,9 +116,10 @@ class MainActivity : AppCompatActivity() {
                 super.onLocationResult(p0)
                 val lastLocation: Location? = p0.lastLocation
                 if (lastLocation != null) {
-                    var lat = lastLocation.latitude
-                    var lon = lastLocation.longitude
+                    val lat = lastLocation.latitude
+                    val lon = lastLocation.longitude
                     fetchingData(lat,lon)
+                    takeForecastData(lat,lon)
                     fusedLocationClient.removeLocationUpdates(this)
                 }
             }
@@ -137,7 +141,7 @@ class MainActivity : AppCompatActivity() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun fetchingData(lat: Double, lon: Double){
-        binding.loadingbar.visibility = VISIBLE
+
         viewmodel.getWeatherData(lat,lon)
         viewmodel.response.observe(this) {response ->
             shimmerLayout.stopShimmer()
@@ -148,18 +152,15 @@ class MainActivity : AppCompatActivity() {
             weatherDetection(getData)
             weatherIconChanger(getData)
             takeStateData(getData.name)
-            binding.loadingbar.visibility = GONE
         }
         viewmodel.error.observe(this) {error ->
             Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
-            binding.loadingbar.visibility = GONE
         }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun postCity(cityName: String){
         viewmodel.getCityWeatherData(cityName)
-        binding.loadingbar.visibility = VISIBLE
         viewmodel.cityResponse.observe(this) {cityResponse ->
             shimmerLayout.stopShimmer()
             shimmerLayout.visibility = GONE
@@ -169,11 +170,25 @@ class MainActivity : AppCompatActivity() {
             weatherDetection(getData)
             weatherIconChanger(getData)
             takeStateData(getData.name)
-            binding.loadingbar.visibility = GONE
             binding.searchCity.text?.clear()
         }
         viewmodel.error.observe(this) {cityError ->
-            binding.loadingbar.visibility = GONE
+        }
+    }
+
+    private fun takeForecastData(lat: Double, lon: Double){
+        viewmodel.fetchForecast(lat,lon)
+        viewmodel.forecast.observe(this) { response ->
+            shimmerLayout.stopShimmer()
+            shimmerLayout.visibility = GONE
+            binding.mainlayout.visibility = VISIBLE
+            adapter = WeatherForecastAdapter(response)
+            binding.forecastHour.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+            binding.forecastHour.adapter = adapter
+
+        }
+        viewmodel.error.observe(this) { error ->
+            Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -181,23 +196,19 @@ class MainActivity : AppCompatActivity() {
     @SuppressLint("SetTextI18n")
     private fun updateUI(getData: WeatherResponse) {
         binding.cityName.text = "${getData.name}, "
-        binding.mainTemp.text = kelvinToCelsius(getData.main.temp).toString() + "°C"
-        binding.maxandminTemp.text = "Max " + kelvinToCelsius(getData.main.temp_max) + "°C" + " | " +
-                                        "Min " + kelvinToCelsius(getData.main.temp_min) + "°C"
+        binding.mainTemp.text = toolbox.kelvinToCelsius(getData.main.temp).toString() + "°C"
+        binding.maxandminTemp.text = "Max " + toolbox.kelvinToCelsius(getData.main.temp_max) + "°C" + " | " +
+                                        "Min " + toolbox.kelvinToCelsius(getData.main.temp_min) + "°C"
         binding.skydispcrit.text = getData.weather[0].description
-        binding.feelsLike.text = "Feel Like ${kelvinToCelsius(getData.main.feels_like)} °C"
+        binding.feelsLike.text = "Feel Like ${toolbox.kelvinToCelsius(getData.main.feels_like)} °C"
         binding.humidityValue.text = "${ getData.main.humidity } °C"
         binding.cloudsValue.text = getData.clouds.all.toString() + "%"
-        binding.sunriseValue.text = timeStampConvertor(getData.sys.sunrise)
-        binding.sunsetValue.text = timeStampConvertor(getData.sys.sunset)
+        binding.sunriseValue.text = toolbox.timeStampConvertor(getData.sys.sunrise)
+        binding.sunsetValue.text = toolbox.timeStampConvertor(getData.sys.sunset)
         binding.visibilityValue.text = "${getData.visibility/1000} Km"
-        binding.timeofdata.text = timeStampConvertor(getData.dt.toLong())
+        binding.timeofdata.text = toolbox.timeStampConvertor(getData.dt)
         binding.windspeed.text = "${getData.wind.speed} m/s"
         binding.pressureValue.text = getData.main.pressure.toString()
-    }
-
-    private fun kelvinToCelsius(kelvin: Double): Int {
-        return (kelvin - 273.15).toInt()
     }
     private fun weatherIconChanger(getData: WeatherResponse){
         val weatherIcon = when (getData.weather[0].main){
@@ -211,8 +222,7 @@ class MainActivity : AppCompatActivity() {
         binding.weathericon.visibility = VISIBLE
         binding.weathericon.setImageResource(weatherIcon)
     }
-
-    private fun weatherDetection(getData: WeatherResponse){
+    fun weatherDetection(getData: WeatherResponse){
         val weather = when (getData.weather[0].main){
             "Clouds" -> R.drawable.cloudy_wallpaper
             "Clear" -> R.drawable.clear_weather
@@ -224,14 +234,5 @@ class MainActivity : AppCompatActivity() {
             else -> R.drawable.clear_weather
         }
         binding.main.setBackgroundResource(weather)
-    }
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun timeStampConvertor(timeStamp: Long): String {
-        var sourceZone = ZoneId.of("UTC")
-        var targetZone = ZoneId.of("Asia/Kolkata")
-        var sourceTimeStamp = Instant.ofEpochSecond(timeStamp).atZone(sourceZone)
-        var targetTimeStamp = sourceTimeStamp.withZoneSameInstant(targetZone)
-        return targetTimeStamp.format(DateTimeFormatter.ofPattern("HH:mm"))
     }
 }

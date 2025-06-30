@@ -1,6 +1,7 @@
 package com.project.weather.repository
 
 import com.project.weather.apiservices.ApiServices
+import com.project.weather.models.ForecastResponse
 import com.project.weather.models.GeocodingResponse
 import com.project.weather.models.WeatherResponse
 
@@ -17,5 +18,9 @@ class WeatherRepository(private val apiService: ApiServices) {
 
     suspend fun getCityData(city: String): List<GeocodingResponse>{
         return apiService.fetchStateName(city, apikey)
+    }
+
+    suspend fun getForecastData(lat: Double, lon: Double): ForecastResponse {
+        return apiService.getForecast(lat, lon, apikey)
     }
 }

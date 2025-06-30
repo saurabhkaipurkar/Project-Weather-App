@@ -21,4 +21,5 @@
     <string name="timezone">TimeZone</string>
     <string name="weather_img">Weather_Img</string>
     <string name="stateName">State</string>
+    <string name="_3_hour_forecast">3 Hour Forecast</string>
 </resources>

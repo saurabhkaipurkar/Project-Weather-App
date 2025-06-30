@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/rootLayout"
@@ -9,226 +8,267 @@
     <!-- Shimmer layout -->
     <include layout="@layout/skeleton_weather_screen" />
 
-    <!-- Main content -->
-    <LinearLayout
-        android:id="@+id/mainlayout"
-        android:orientation="vertical"
-        android:visibility="gone"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/main"
+        <!-- Main content -->
+        <LinearLayout
+            android:id="@+id/mainlayout"
+            android:orientation="vertical"
+            android:visibility="gone"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/gradient_background"
-            android:padding="20dp">
+            android:layout_height="wrap_content">
 
-            <!-- Enhanced Search Section with Glass Morphism Effect -->
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/searchContainer"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/main"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
-                android:hint="@string/enter_city"
-                android:textColorHint="@color/text_color"
-                app:boxCornerRadiusTopStart="20dp"
-                app:boxCornerRadiusTopEnd="20dp"
-                app:boxCornerRadiusBottomStart="20dp"
-                app:boxCornerRadiusBottomEnd="20dp"
-                app:boxStrokeColor="@color/glass_border_color"
-                app:boxBackgroundColor="@color/glass_background_color"
-                app:boxStrokeWidth="2dp"
-                app:endIconDrawable="@drawable/search_icon_enhanced"
-                app:endIconMode="custom"
-                app:endIconTint="@color/accent_color"
-                app:startIconDrawable="@drawable/location_icon_enhanced"
-                app:startIconTint="@color/accent_color"
-                app:hintTextColor="@color/accent_color"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:elevation="8dp">
+                android:background="@drawable/gradient_background"
+                android:padding="12dp">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/searchCity"
+                <!-- Enhanced Search Section with Glass Morphism Effect -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/searchContainer"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:paddingStart="60dp"
-                    android:paddingEnd="60dp"
-                    android:paddingTop="16dp"
-                    android:paddingBottom="16dp"
-                    android:autofillHints="name"
-                    android:imeOptions="actionSend"
-                    android:inputType="textCapWords|textAutoComplete"
-                    android:textColor="@color/primary_text_color"
-                    android:textColorHint="@color/text_hint_color"
-                    android:textSize="16sp"
-                    android:fontFamily="@font/roboto_medium"/>
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:layout_marginTop="32dp"
+                    android:hint="@string/enter_city"
+                    android:textColorHint="@color/text_color"
+                    app:boxCornerRadiusTopStart="20dp"
+                    app:boxCornerRadiusTopEnd="20dp"
+                    app:boxCornerRadiusBottomStart="20dp"
+                    app:boxCornerRadiusBottomEnd="20dp"
+                    app:boxStrokeColor="@color/persistence_stroke_color"
+                    app:boxBackgroundColor="@color/color_background_color"
+                    app:boxStrokeWidth="2dp"
+                    app:endIconDrawable="@drawable/search_icon_enhanced"
+                    app:endIconMode="custom"
+                    app:endIconTint="@color/accent_color"
+                    app:startIconDrawable="@drawable/location_icon_enhanced"
+                    app:startIconTint="@color/accent_color"
+                    app:hintTextColor="@color/accent_color"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:elevation="8dp">
 
-            <!-- Enhanced Current Weather Card with Gradient Background -->
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cardCurrentWeather"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="28dp"
-                app:cardCornerRadius="24dp"
-                app:cardBackgroundColor="@color/weather_card_background"
-                app:cardElevation="12dp"
-                app:strokeColor="@color/card_stroke_color"
-                app:strokeWidth="1dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/searchContainer"
-                android:background="@drawable/weather_card_gradient">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/searchCity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:paddingStart="60dp"
+                        android:paddingEnd="60dp"
+                        android:paddingTop="16dp"
+                        android:paddingBottom="16dp"
+                        android:autofillHints="name"
+                        android:imeOptions="actionSend"
+                        android:inputType="textCapWords|textAutoComplete"
+                        android:textColor="@color/text_color"
+                        android:textSize="16sp"
+                        android:fontFamily="@font/roboto_medium"/>
+                </com.google.android.material.textfield.TextInputLayout>
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/middleconstraint"
+                <!-- Enhanced Current Weather Card with Gradient Background -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardCurrentWeather"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="28dp"
+                    android:layout_marginTop="28dp"
+                    app:cardCornerRadius="24dp"
+                    app:cardBackgroundColor="@color/weather_card_background"
+                    app:cardElevation="12dp"
+                    app:strokeColor="@color/card_stroke_color"
+                    app:strokeWidth="1dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/searchContainer"
                     android:background="@drawable/weather_card_gradient">
 
-                    <!-- Enhanced Header Section -->
-                    <TextView
-                        android:id="@+id/nowLabel"
-                        android:layout_width="wrap_content"
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/middleconstraint"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/now"
-                        android:textColor="@color/primary_text_color"
-                        android:textSize="14sp"
-                        android:textStyle="normal"
-                        android:letterSpacing="0.1"
-                        android:fontFamily="@font/roboto_medium"
-                        android:textAllCaps="true"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        android:padding="28dp"
+                        android:background="@drawable/weather_card_gradient">
 
-                    <!-- Enhanced Location Info -->
-                    <TextView
-                        android:id="@+id/cityName"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:hint="@string/city_name"
-                        android:textColor="@color/primary_text_color"
-                        android:textSize="28sp"
-                        android:textStyle="bold"
-                        android:letterSpacing="0.01"
-                        android:fontFamily="@font/roboto_bold"
-                        app:layout_constraintStart_toStartOf="@id/nowLabel"
-                        app:layout_constraintTop_toBottomOf="@id/nowLabel" />
+                        <!-- Enhanced Header Section -->
+                        <TextView
+                            android:id="@+id/nowLabel"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/now"
+                            android:textColor="@color/text_color"
+                            android:textSize="14sp"
+                            android:textStyle="normal"
+                            android:letterSpacing="0.1"
+                            android:fontFamily="@font/roboto_medium"
+                            android:textAllCaps="true"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
 
-                    <TextView
-                        android:id="@+id/stateName"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:hint="@string/stateName"
-                        android:textColor="@color/secondary_text_color"
-                        android:textSize="16sp"
-                        android:fontFamily="@font/roboto_regular"
-                        app:layout_constraintStart_toStartOf="@id/cityName"
-                        app:layout_constraintTop_toBottomOf="@id/cityName" />
+                        <!-- Enhanced Location Info -->
+                        <TextView
+                            android:id="@+id/cityName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:hint="@string/city_name"
+                            android:textColor="@color/text_color"
+                            android:textSize="28sp"
+                            android:textStyle="bold"
+                            android:letterSpacing="0.01"
+                            android:fontFamily="@font/roboto_bold"
+                            app:layout_constraintStart_toStartOf="@id/nowLabel"
+                            app:layout_constraintTop_toBottomOf="@id/nowLabel" />
 
-                    <!-- Enhanced Temperature Section -->
-                    <TextView
-                        android:id="@+id/mainTemp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="24dp"
-                        android:hint="@string/_0_c"
-                        android:textColor="@color/temperature_color"
-                        android:textSize="72sp"
-                        android:textStyle="normal"
-                        android:letterSpacing="-0.02"
-                        android:fontFamily="@font/roboto_thin"
-                        app:layout_constraintStart_toStartOf="@id/cityName"
-                        app:layout_constraintTop_toBottomOf="@id/stateName" />
+                        <TextView
+                            android:id="@+id/stateName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:hint="@string/stateName"
+                            android:textColor="@color/text_color"
+                            android:textSize="16sp"
+                            android:fontFamily="@font/roboto_regular"
+                            app:layout_constraintStart_toStartOf="@id/cityName"
+                            app:layout_constraintTop_toBottomOf="@id/cityName" />
 
-                    <!-- Enhanced Weather Icon with Animation -->
-                    <ImageView
-                        android:visibility="gone"
-                        android:id="@+id/weathericon"
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
-                        android:layout_marginStart="20dp"
-                        android:contentDescription="@string/weather_img"
-                        android:src="@drawable/weather_icon_enhanced"
-                        android:scaleType="fitCenter"
-                        app:layout_constraintBottom_toBottomOf="@id/mainTemp"
-                        app:layout_constraintStart_toEndOf="@id/mainTemp"
-                        app:layout_constraintTop_toTopOf="@id/mainTemp"
-                        app:tint="@color/weather_icon_color" />
+                        <!-- Enhanced Temperature Section -->
+                        <TextView
+                            android:id="@+id/mainTemp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="24dp"
+                            android:hint="@string/_0_c"
+                            android:textColor="@color/text_color"
+                            android:textSize="72sp"
+                            android:textStyle="normal"
+                            android:letterSpacing="-0.02"
+                            android:fontFamily="@font/roboto_thin"
+                            app:layout_constraintStart_toStartOf="@id/cityName"
+                            app:layout_constraintTop_toBottomOf="@id/stateName" />
 
-                    <!-- Enhanced Secondary Weather Info -->
-                    <TextView
-                        android:id="@+id/maxandminTemp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:hint="@string/temp"
-                        android:textColor="@color/secondary_text_color"
-                        android:textSize="16sp"
-                        android:fontFamily="@font/roboto_medium"
-                        app:layout_constraintStart_toStartOf="@id/mainTemp"
-                        app:layout_constraintTop_toBottomOf="@id/mainTemp" />
+                        <!-- Enhanced Weather Icon with Animation -->
+                        <ImageView
+                            android:visibility="gone"
+                            android:id="@+id/weathericon"
+                            android:layout_width="80dp"
+                            android:layout_height="80dp"
+                            android:layout_marginStart="20dp"
+                            android:contentDescription="@string/weather_img"
+                            android:src="@drawable/weather_icon_enhanced"
+                            android:scaleType="fitCenter"
+                            app:layout_constraintBottom_toBottomOf="@id/mainTemp"
+                            app:layout_constraintStart_toEndOf="@id/mainTemp"
+                            app:layout_constraintTop_toTopOf="@id/mainTemp"
+                            app:tint="@color/weather_icon_color" />
 
-                    <!-- Enhanced Weather Details Right Side -->
-                    <TextView
-                        android:id="@+id/skydispcrit"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/weather"
-                        android:textColor="@color/primary_text_color"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        android:gravity="end"
-                        android:fontFamily="@font/roboto_medium"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/nowLabel" />
+                        <!-- Enhanced Secondary Weather Info -->
+                        <TextView
+                            android:id="@+id/maxandminTemp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:hint="@string/temp"
+                            android:textColor="@color/secondary_text_color"
+                            android:textSize="16sp"
+                            android:fontFamily="@font/roboto_medium"
+                            app:layout_constraintStart_toStartOf="@id/mainTemp"
+                            app:layout_constraintTop_toBottomOf="@id/mainTemp" />
 
-                    <TextView
-                        android:id="@+id/feelsLike"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:hint="@string/feel_like"
-                        android:textColor="@color/secondary_text_color"
-                        android:textSize="14sp"
-                        android:gravity="end"
-                        android:fontFamily="@font/roboto_regular"
-                        app:layout_constraintEnd_toEndOf="@id/skydispcrit"
-                        app:layout_constraintTop_toBottomOf="@id/skydispcrit" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-            </com.google.android.material.card.MaterialCardView>
+                        <!-- Enhanced Weather Details Right Side -->
+                        <TextView
+                            android:id="@+id/skydispcrit"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/weather"
+                            android:textColor="@color/text_color"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:gravity="end"
+                            android:fontFamily="@font/roboto_medium"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/nowLabel" />
 
-            <!-- Enhanced Weather Details Grid with Glass Morphism -->
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_marginTop="20dp"
-                app:cardCornerRadius="24dp"
-                app:cardElevation="8dp"
-                app:strokeColor="@color/glass_border_color"
-                app:cardBackgroundColor="@color/glass_background_color"
-                app:strokeWidth="1dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cardCurrentWeather"
-                android:backgroundTint="@color/details_card_background">
+                        <TextView
+                            android:id="@+id/feelsLike"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:hint="@string/feel_like"
+                            android:textColor="@color/text_color"
+                            android:textSize="14sp"
+                            android:gravity="end"
+                            android:fontFamily="@font/roboto_regular"
+                            app:layout_constraintEnd_toEndOf="@id/skydispcrit"
+                            app:layout_constraintTop_toBottomOf="@id/skydispcrit" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </com.google.android.material.card.MaterialCardView>
 
-                <ScrollView
+                <!-- NEW CARD VIEW - Add this below cardCurrentWeather -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardAdditionalInfo"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:fillViewport="true"
-                    android:overScrollMode="never"
-                    android:scrollbars="none">
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginHorizontal="12dp"
+                    app:cardCornerRadius="28dp"
+                    app:cardElevation="8dp"
+                    app:strokeColor="@color/card_stroke_color"
+                    app:strokeWidth="1dp"
+                    app:cardBackgroundColor="@color/color_background_color"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/cardCurrentWeather">
+
+                    <!-- Add your content here -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:text="@string/_3_hour_forecast"
+                            android:textColor="@color/text_color"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:fontFamily="@font/roboto_regular"/>
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/forecast_hour"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:padding="10dp"
+                            android:nestedScrollingEnabled="false"
+                            android:overScrollMode="never"
+                            android:scrollbars="horizontal"/>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    app:cardCornerRadius="24dp"
+                    app:cardElevation="8dp"
+                    app:strokeColor="@color/glass_border_color"
+                    app:cardBackgroundColor="@color/glass_background_color"
+                    app:strokeWidth="1dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/cardAdditionalInfo"
+                    android:backgroundTint="@color/details_card_background">
 
                     <androidx.gridlayout.widget.GridLayout
                         android:layout_width="match_parent"
@@ -244,7 +284,7 @@
                             android:layout_margin="6dp"
                             app:cardCornerRadius="20dp"
                             app:cardElevation="6dp"
-                            app:cardBackgroundColor="@color/detail_card_background"
+                            app:cardBackgroundColor="@color/color_background_color"
                             app:cardPreventCornerOverlap="false"
                             app:layout_columnWeight="1"
                             app:layout_gravity="fill"
@@ -273,7 +313,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="8dp"
                                     android:hint="@string/clouds"
-                                    android:textColor="@color/primary_text_color"
+                                    android:textColor="@color/text_color"
                                     android:textSize="14sp"
                                     android:fontFamily="@font/roboto_medium"
                                     android:gravity="center" />
@@ -281,8 +321,8 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="Clouds"
-                                    android:textColor="@color/secondary_text_color"
+                                    android:text="@string/clouds"
+                                    android:textColor="@color/text_color"
                                     android:textSize="11sp"
                                     android:fontFamily="@font/roboto_regular"
                                     android:layout_marginTop="2dp"
@@ -298,7 +338,7 @@
                             android:layout_margin="6dp"
                             app:cardCornerRadius="20dp"
                             app:cardElevation="6dp"
-                            app:cardBackgroundColor="@color/detail_card_background"
+                            app:cardBackgroundColor="@color/color_background_color"
                             app:cardPreventCornerOverlap="false"
                             app:layout_columnWeight="1"
                             app:layout_gravity="fill"
@@ -327,7 +367,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="8dp"
                                     android:hint="@string/humidity"
-                                    android:textColor="@color/primary_text_color"
+                                    android:textColor="@color/text_color"
                                     android:textSize="14sp"
                                     android:fontFamily="@font/roboto_medium"
                                     android:gravity="center" />
@@ -335,8 +375,8 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="Humidity"
-                                    android:textColor="@color/secondary_text_color"
+                                    android:text="@string/humidity"
+                                    android:textColor="@color/text_color"
                                     android:textSize="11sp"
                                     android:fontFamily="@font/roboto_regular"
                                     android:layout_marginTop="2dp"
@@ -352,7 +392,7 @@
                             android:layout_margin="6dp"
                             app:cardCornerRadius="20dp"
                             app:cardElevation="6dp"
-                            app:cardBackgroundColor="@color/detail_card_background"
+                            app:cardBackgroundColor="@color/color_background_color"
                             app:cardPreventCornerOverlap="false"
                             app:layout_columnWeight="1"
                             app:layout_gravity="fill"
@@ -381,7 +421,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="8dp"
                                     android:hint="@string/wind_speed"
-                                    android:textColor="@color/primary_text_color"
+                                    android:textColor="@color/text_color"
                                     android:textSize="14sp"
                                     android:fontFamily="@font/roboto_medium"
                                     android:gravity="center" />
@@ -389,8 +429,8 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="Wind Speed"
-                                    android:textColor="@color/secondary_text_color"
+                                    android:text="@string/wind_speed"
+                                    android:textColor="@color/text_color"
                                     android:textSize="11sp"
                                     android:fontFamily="@font/roboto_regular"
                                     android:layout_marginTop="2dp"
@@ -406,7 +446,7 @@
                             android:layout_margin="6dp"
                             app:cardCornerRadius="20dp"
                             app:cardElevation="6dp"
-                            app:cardBackgroundColor="@color/detail_card_background"
+                            app:cardBackgroundColor="@color/color_background_color"
                             app:cardPreventCornerOverlap="false"
                             app:layout_columnWeight="1"
                             app:layout_gravity="fill"
@@ -435,7 +475,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="8dp"
                                     android:hint="@string/visibility"
-                                    android:textColor="@color/primary_text_color"
+                                    android:textColor="@color/text_color"
                                     android:textSize="14sp"
                                     android:fontFamily="@font/roboto_medium"
                                     android:gravity="center" />
@@ -443,8 +483,8 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="Visibility"
-                                    android:textColor="@color/secondary_text_color"
+                                    android:text="@string/visibility"
+                                    android:textColor="@color/text_color"
                                     android:textSize="11sp"
                                     android:fontFamily="@font/roboto_regular"
                                     android:layout_marginTop="2dp"
@@ -460,7 +500,7 @@
                             android:layout_margin="6dp"
                             app:cardCornerRadius="20dp"
                             app:cardElevation="6dp"
-                            app:cardBackgroundColor="@color/detail_card_background"
+                            app:cardBackgroundColor="@color/color_background_color"
                             app:cardPreventCornerOverlap="false"
                             app:layout_columnWeight="1"
                             app:layout_gravity="fill"
@@ -489,7 +529,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="8dp"
                                     android:hint="@string/sunrise"
-                                    android:textColor="@color/primary_text_color"
+                                    android:textColor="@color/text_color"
                                     android:textSize="14sp"
                                     android:fontFamily="@font/roboto_medium"
                                     android:gravity="center" />
@@ -497,8 +537,8 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="Sunrise"
-                                    android:textColor="@color/secondary_text_color"
+                                    android:text="@string/sunrise"
+                                    android:textColor="@color/text_color"
                                     android:textSize="11sp"
                                     android:fontFamily="@font/roboto_regular"
                                     android:layout_marginTop="2dp"
@@ -514,7 +554,7 @@
                             android:layout_margin="6dp"
                             app:cardCornerRadius="20dp"
                             app:cardElevation="6dp"
-                            app:cardBackgroundColor="@color/detail_card_background"
+                            app:cardBackgroundColor="@color/color_background_color"
                             app:cardPreventCornerOverlap="false"
                             app:layout_columnWeight="1"
                             app:layout_gravity="fill"
@@ -543,7 +583,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="8dp"
                                     android:hint="@string/sunset"
-                                    android:textColor="@color/primary_text_color"
+                                    android:textColor="@color/text_color"
                                     android:textSize="14sp"
                                     android:fontFamily="@font/roboto_medium"
                                     android:gravity="center" />
@@ -551,8 +591,8 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="Sunset"
-                                    android:textColor="@color/secondary_text_color"
+                                    android:text="@string/sunset"
+                                    android:textColor="@color/text_color"
                                     android:textSize="11sp"
                                     android:fontFamily="@font/roboto_regular"
                                     android:layout_marginTop="2dp"
@@ -568,7 +608,7 @@
                             android:layout_margin="6dp"
                             app:cardCornerRadius="20dp"
                             app:cardElevation="6dp"
-                            app:cardBackgroundColor="@color/detail_card_background"
+                            app:cardBackgroundColor="@color/color_background_color"
                             app:cardPreventCornerOverlap="false"
                             app:layout_columnWeight="1"
                             app:layout_gravity="fill"
@@ -597,7 +637,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="8dp"
                                     android:hint="@string/pressure"
-                                    android:textColor="@color/primary_text_color"
+                                    android:textColor="@color/text_color"
                                     android:textSize="14sp"
                                     android:fontFamily="@font/roboto_medium"
                                     android:gravity="center" />
@@ -605,8 +645,8 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="Pressure"
-                                    android:textColor="@color/secondary_text_color"
+                                    android:text="@string/pressure"
+                                    android:textColor="@color/text_color"
                                     android:textSize="11sp"
                                     android:fontFamily="@font/roboto_regular"
                                     android:layout_marginTop="2dp"
@@ -622,7 +662,7 @@
                             android:layout_margin="6dp"
                             app:cardCornerRadius="20dp"
                             app:cardElevation="6dp"
-                            app:cardBackgroundColor="@color/detail_card_background"
+                            app:cardBackgroundColor="@color/color_background_color"
                             app:cardPreventCornerOverlap="false"
                             app:layout_columnWeight="1"
                             app:layout_gravity="fill"
@@ -651,7 +691,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="8dp"
                                     android:hint="@string/timezone"
-                                    android:textColor="@color/primary_text_color"
+                                    android:textColor="@color/text_color"
                                     android:textSize="14sp"
                                     android:fontFamily="@font/roboto_medium"
                                     android:gravity="center" />
@@ -659,8 +699,8 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="Timezone"
-                                    android:textColor="@color/secondary_text_color"
+                                    android:text="@string/timezone"
+                                    android:textColor="@color/text_color"
                                     android:textSize="11sp"
                                     android:fontFamily="@font/roboto_regular"
                                     android:layout_marginTop="2dp"
@@ -669,23 +709,9 @@
                             </LinearLayout>
                         </com.google.android.material.card.MaterialCardView>
                     </androidx.gridlayout.widget.GridLayout>
-                </ScrollView>
-            </com.google.android.material.card.MaterialCardView>
+                </com.google.android.material.card.MaterialCardView>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
 
-            <!-- Enhanced Loading Bar -->
-            <ProgressBar
-                android:id="@+id/loadingbar"
-                style="@style/Widget.MaterialComponents.CircularProgressIndicator"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:visibility="gone"
-                android:indeterminateTint="@color/accent_color"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </LinearLayout>
+    </ScrollView>
 </FrameLayout>

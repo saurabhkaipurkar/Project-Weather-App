@@ -1,5 +1,6 @@
 package com.project.weather.apiservices
 
+import com.project.weather.models.ForecastResponse
 import com.project.weather.models.GeocodingResponse
 import com.project.weather.models.WeatherResponse
 import retrofit2.http.GET
@@ -24,5 +25,12 @@ interface ApiServices {
     suspend fun fetchStateName(
         @Query("q") city: String,
         @Query("appid") apiKey: String
-    ): List<GeocodingResponse>
+    ) : List<GeocodingResponse>
+
+    @GET("data/2.5/forecast")
+    suspend fun getForecast(
+        @Query("lat") lat: Double,
+        @Query("lon") lon: Double,
+        @Query("appid") apiKey: String
+    ) : ForecastResponse
 }

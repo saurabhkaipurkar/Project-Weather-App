@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.project.weather.models.ForecastResponse
 import com.project.weather.models.GeocodingResponse
 import com.project.weather.models.WeatherResponse
 import com.project.weather.repository.WeatherRepository
@@ -54,6 +55,22 @@ class WeatherViewmodel(private val repository: WeatherRepository) : ViewModel() 
             try {
                 val response = repository.getCityData(cityName)
                 _stateName.value = response
+            } catch (e: Exception) {
+                _error.value = e.message
+            }
+        }
+    }
+
+    //==============================================================================================
+
+    private val _forecast = MutableLiveData<ForecastResponse>()
+    val forecast: LiveData<ForecastResponse> = _forecast
+
+    fun fetchForecast(lat: Double, lon: Double) {
+        viewModelScope.launch {
+            try {
+                val response = repository.getForecastData(lat, lon)
+                _forecast.value = response
             } catch (e: Exception) {
                 _error.value = e.message
             }

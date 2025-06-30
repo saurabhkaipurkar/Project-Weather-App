@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="120dp"
+    android:layout_height="160dp"
+    android:layout_margin="8dp"
+    app:cardCornerRadius="20dp"
+    app:cardElevation="6dp"
+    app:cardBackgroundColor="@color/color_background_color"
+    app:cardPreventCornerOverlap="false"
+    app:strokeColor="@color/detail_card_stroke"
+    app:strokeWidth="1dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="12dp">
+
+        <!-- Day of the week -->
+        <TextView
+            android:id="@+id/dayOfWeek"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="MON"
+            android:textColor="@color/text_color"
+            android:textSize="12sp"
+            android:fontFamily="@font/roboto_medium"
+            android:textAllCaps="true"
+            android:letterSpacing="0.1"
+            android:layout_marginBottom="8dp" />
+
+        <!-- Weather Icon -->
+        <ImageView
+            android:id="@+id/weatherIcon"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:contentDescription="@string/weather_img"
+            android:src="@drawable/weather_icon_enhanced"
+            android:scaleType="fitCenter"
+            app:tint="@color/weather_icon_color"
+            android:layout_marginBottom="8dp" />
+
+        <!-- High Temperature -->
+        <TextView
+            android:id="@+id/highTemp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="31°"
+            android:textColor="@color/text_color"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:fontFamily="@font/roboto_bold"
+            android:layout_marginBottom="2dp" />
+
+        <!-- Low Temperature -->
+        <TextView
+            android:id="@+id/lowTemp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="25°"
+            android:textColor="@color/text_color"
+            android:textSize="14sp"
+            android:fontFamily="@font/roboto_regular" />
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>
