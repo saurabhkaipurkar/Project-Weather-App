@@ -1,5 +1,6 @@
 package com.saurabh.weather.apiservices
 
+import com.saurabh.weather.models.AirQualityResponse
 import com.saurabh.weather.models.ForecastResponse
 import com.saurabh.weather.models.GeocodingResponse
 import com.saurabh.weather.models.WeatherResponse
@@ -33,4 +34,11 @@ interface ApiServices {
         @Query("lon") lon: Double,
         @Query("appid") apiKey: String
     ) : ForecastResponse
+
+    @GET("data/2.5/air_pollution")
+    suspend fun getAirQuality(
+        @Query("lat") lat: Double,
+        @Query("lon") lon: Double,
+        @Query("appid") apiKey: String
+    ) : AirQualityResponse
 }

@@ -1,6 +1,7 @@
 package com.saurabh.weather.repository
 
 import com.saurabh.weather.apiservices.ApiServices
+import com.saurabh.weather.models.AirQualityResponse
 import com.saurabh.weather.models.ForecastResponse
 import com.saurabh.weather.models.GeocodingResponse
 import com.saurabh.weather.models.WeatherResponse
@@ -22,5 +23,8 @@ class WeatherRepository(private val apiService: ApiServices) {
 
     suspend fun getForecastData(lat: Double, lon: Double): ForecastResponse {
         return apiService.getForecast(lat, lon, apikey)
+    }
+    suspend fun getAirQuality(lat: Double, lon: Double): AirQualityResponse {
+        return apiService.getAirQuality(lat, lon, apikey)
     }
 }

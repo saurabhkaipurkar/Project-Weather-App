@@ -1,5 +1,6 @@
 package com.saurabh.weather.adapters
 
+import android.annotation.SuppressLint
 import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
@@ -22,6 +23,7 @@ class WeatherForecastAdapter(private val data: ForecastResponse
         return WeatherForecastViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.hourly_forecast, parent, false))
     }
 
+    @SuppressLint("SetTextI18n")
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(
         holder: WeatherForecastViewHolder,

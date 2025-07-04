@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.saurabh.weather.models.AirQualityResponse
 import com.saurabh.weather.models.ForecastResponse
 import com.saurabh.weather.models.GeocodingResponse
 import com.saurabh.weather.models.WeatherResponse
@@ -72,6 +73,22 @@ class WeatherViewmodel(private val repository: WeatherRepository) : ViewModel() 
                 val response = repository.getForecastData(lat, lon)
                 _forecast.value = response
             } catch (e: Exception) {
+                _error.value = e.message
+            }
+        }
+    }
+
+    //==============================================================================================
+
+    private val _airQuality = MutableLiveData<AirQualityResponse>()
+    val airQuality: LiveData<AirQualityResponse> = _airQuality
+
+    fun fetchAirQuality(lat: Double, lon: Double) {
+        viewModelScope.launch {
+            try {
+                val response = repository.getAirQuality(lat, lon)
+                _airQuality.value = response
+                } catch (e: Exception) {
                 _error.value = e.message
             }
         }
