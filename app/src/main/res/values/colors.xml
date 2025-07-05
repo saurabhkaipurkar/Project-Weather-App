@@ -59,4 +59,13 @@
     <color name="gradient_end">#764BA2</color>
     <color name="card_gradient_start">#FFFFFF</color>
     <color name="card_gradient_end">#F8FAFC</color>
+
+    <color name="shimmer_base_color">#E0E0E0</color>
+    <color name="shimmer_highlight_color">#F5F5F5</color>
+    <color name="shimmer_stroke_color">#DADADA</color>
+
+    <!-- Dark theme shimmer colors -->
+    <color name="shimmer_base_color_dark">#2C2C2C</color>
+    <color name="shimmer_highlight_color_dark">#3C3C3C</color>
+    <color name="shimmer_stroke_color_dark">#404040</color>
 </resources>

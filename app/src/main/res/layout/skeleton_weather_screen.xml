@@ -5,49 +5,582 @@
     android:id="@+id/shimmerLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/gradient_background"
-    android:padding="16dp"
+    android:background="@color/color_background_color"
+    android:padding="12dp"
     app:shimmer_auto_start="true"
-    app:shimmer_duration="1700">
+    app:shimmer_direction="left_to_right"
+    app:shimmer_duration="1700"
+    app:shimmer_repeat_count="-1"
+    app:shimmer_repeat_mode="restart"
+    app:shimmer_shape="linear"
+    app:shimmer_tilt="-1">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="26dp">
+        android:layout_height="match_parent">
 
-        <!-- Fake Search Bar -->
-        <View
-            android:id="@+id/fakeSearch"
-            android:layout_width="0dp"
-            android:layout_height="56dp"
-            android:background="@drawable/skeleton_placeholder"
-            app:layout_constraintTop_toTopOf="parent"
+        <!-- Search Section Shimmer -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/shimmerSearch"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginTop="32dp"
+            app:cardCornerRadius="20dp"
+            app:cardBackgroundColor="@color/shimmer_base_color"
+            app:strokeColor="@color/shimmer_stroke_color"
+            app:strokeWidth="1dp"
+            app:cardElevation="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintTop_toTopOf="parent">
 
-        <!-- Fake Weather Card -->
-        <View
-            android:id="@+id/fakeWeatherCard"
-            android:layout_width="0dp"
-            android:layout_height="180dp"
-            android:layout_marginTop="28dp"
-            android:background="@drawable/skeleton_placeholder"
-            app:layout_constraintTop_toBottomOf="@id/fakeSearch"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:padding="16dp">
 
-        <!-- Fake Grid Card -->
-        <View
-            android:id="@+id/fakeGridCard"
-            android:layout_width="0dp"
+                <!-- Location icon placeholder -->
+                <View
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginStart="12dp"
+                    android:background="@drawable/shimmer_circle_shape"/>
+
+                <!-- Search text placeholder -->
+                <View
+                    android:layout_width="120dp"
+                    android:layout_height="16dp"
+                    android:layout_marginStart="16dp"
+                    android:background="@drawable/shimmer_rounded_rectangle"/>
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1"/>
+
+                <!-- Search icon placeholder -->
+                <View
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginEnd="12dp"
+                    android:background="@drawable/shimmer_circle_shape"/>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- ScrollView with shimmer content -->
+        <ScrollView
+            android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="20dp"
-            android:background="@drawable/skeleton_placeholder"
-            app:layout_constraintTop_toBottomOf="@id/fakeWeatherCard"
+            android:fillViewport="true"
+            android:overScrollMode="never"
+            android:scrollbars="none"
+            app:layout_constraintTop_toBottomOf="@id/shimmerSearch"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent">
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingBottom="24dp">
+
+                <!-- Current Weather Card Shimmer -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="28dp"
+                    app:cardCornerRadius="24dp"
+                    app:cardBackgroundColor="@color/shimmer_base_color"
+                    app:strokeColor="@color/shimmer_stroke_color"
+                    app:strokeWidth="1dp"
+                    app:cardElevation="12dp">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="28dp">
+
+                        <!-- NOW label placeholder -->
+                        <View
+                            android:id="@+id/nowLabelShimmer"
+                            android:layout_width="40dp"
+                            android:layout_height="14dp"
+                            android:background="@drawable/shimmer_rounded_rectangle"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"/>
+
+                        <!-- City name placeholder -->
+                        <View
+                            android:id="@+id/cityNameShimmer"
+                            android:layout_width="180dp"
+                            android:layout_height="28dp"
+                            android:layout_marginTop="8dp"
+                            android:background="@drawable/shimmer_rounded_rectangle"
+                            app:layout_constraintStart_toStartOf="@id/nowLabelShimmer"
+                            app:layout_constraintTop_toBottomOf="@id/nowLabelShimmer"/>
+
+                        <!-- State name placeholder -->
+                        <View
+                            android:id="@+id/stateNameShimmer"
+                            android:layout_width="120dp"
+                            android:layout_height="16dp"
+                            android:layout_marginTop="4dp"
+                            android:background="@drawable/shimmer_rounded_rectangle"
+                            app:layout_constraintStart_toStartOf="@id/cityNameShimmer"
+                            app:layout_constraintTop_toBottomOf="@id/cityNameShimmer"/>
+
+                        <!-- Main temperature placeholder -->
+                        <View
+                            android:id="@+id/mainTempShimmer"
+                            android:layout_width="120dp"
+                            android:layout_height="72dp"
+                            android:layout_marginTop="24dp"
+                            android:background="@drawable/shimmer_rounded_rectangle"
+                            app:layout_constraintStart_toStartOf="@id/cityNameShimmer"
+                            app:layout_constraintTop_toBottomOf="@id/stateNameShimmer"/>
+
+                        <!-- Min/Max temperature placeholder -->
+                        <View
+                            android:id="@+id/minMaxTempShimmer"
+                            android:layout_width="100dp"
+                            android:layout_height="16dp"
+                            android:layout_marginTop="8dp"
+                            android:background="@drawable/shimmer_rounded_rectangle"
+                            app:layout_constraintStart_toStartOf="@id/mainTempShimmer"
+                            app:layout_constraintTop_toBottomOf="@id/mainTempShimmer"/>
+
+                        <!-- Weather description placeholder -->
+                        <View
+                            android:id="@+id/weatherDescShimmer"
+                            android:layout_width="100dp"
+                            android:layout_height="18dp"
+                            android:background="@drawable/shimmer_rounded_rectangle"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/nowLabelShimmer"/>
+
+                        <!-- Feels like placeholder -->
+                        <View
+                            android:layout_width="80dp"
+                            android:layout_height="14dp"
+                            android:layout_marginTop="8dp"
+                            android:background="@drawable/shimmer_rounded_rectangle"
+                            app:layout_constraintEnd_toEndOf="@id/weatherDescShimmer"
+                            app:layout_constraintTop_toBottomOf="@id/weatherDescShimmer"/>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- 3 Hour Forecast Card Shimmer -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    app:cardCornerRadius="24dp"
+                    app:cardBackgroundColor="@color/shimmer_base_color"
+                    app:strokeColor="@color/shimmer_stroke_color"
+                    app:strokeWidth="1dp"
+                    app:cardElevation="12dp">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="16dp">
+
+                        <!-- Forecast title placeholder -->
+                        <View
+                            android:id="@+id/forecastTitleShimmer"
+                            android:layout_width="150dp"
+                            android:layout_height="16dp"
+                            android:layout_marginStart="10dp"
+                            android:background="@drawable/shimmer_rounded_rectangle"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"/>
+
+                        <!-- Forecast items horizontal layout -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:baselineAligned="false"
+                            android:orientation="horizontal"
+                            android:gravity="center"
+                            app:layout_constraintTop_toBottomOf="@id/forecastTitleShimmer">
+
+                            <!-- Forecast item 1 -->
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="vertical"
+                                android:gravity="center"
+                                android:padding="8dp">
+
+                                <View
+                                    android:layout_width="40dp"
+                                    android:layout_height="40dp"
+                                    android:background="@drawable/shimmer_circle_shape"/>
+
+                                <View
+                                    android:layout_width="30dp"
+                                    android:layout_height="12dp"
+                                    android:layout_marginTop="8dp"
+                                    android:background="@drawable/shimmer_rounded_rectangle"/>
+
+                                <View
+                                    android:layout_width="40dp"
+                                    android:layout_height="14dp"
+                                    android:layout_marginTop="4dp"
+                                    android:background="@drawable/shimmer_rounded_rectangle"/>
+                            </LinearLayout>
+
+                            <!-- Forecast item 2 -->
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="vertical"
+                                android:gravity="center"
+                                android:padding="8dp">
+
+                                <View
+                                    android:layout_width="40dp"
+                                    android:layout_height="40dp"
+                                    android:background="@drawable/shimmer_circle_shape"/>
+
+                                <View
+                                    android:layout_width="30dp"
+                                    android:layout_height="12dp"
+                                    android:layout_marginTop="8dp"
+                                    android:background="@drawable/shimmer_rounded_rectangle"/>
+
+                                <View
+                                    android:layout_width="40dp"
+                                    android:layout_height="14dp"
+                                    android:layout_marginTop="4dp"
+                                    android:background="@drawable/shimmer_rounded_rectangle"/>
+                            </LinearLayout>
+
+                            <!-- Forecast item 3 -->
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="vertical"
+                                android:gravity="center"
+                                android:padding="8dp">
+
+                                <View
+                                    android:layout_width="40dp"
+                                    android:layout_height="40dp"
+                                    android:background="@drawable/shimmer_circle_shape"/>
+
+                                <View
+                                    android:layout_width="30dp"
+                                    android:layout_height="12dp"
+                                    android:layout_marginTop="8dp"
+                                    android:background="@drawable/shimmer_rounded_rectangle"/>
+
+                                <View
+                                    android:layout_width="40dp"
+                                    android:layout_height="14dp"
+                                    android:layout_marginTop="4dp"
+                                    android:background="@drawable/shimmer_rounded_rectangle"/>
+                            </LinearLayout>
+
+                            <!-- Forecast item 4 -->
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="vertical"
+                                android:gravity="center"
+                                android:padding="8dp">
+
+                                <View
+                                    android:layout_width="40dp"
+                                    android:layout_height="40dp"
+                                    android:background="@drawable/shimmer_circle_shape"/>
+
+                                <View
+                                    android:layout_width="30dp"
+                                    android:layout_height="12dp"
+                                    android:layout_marginTop="8dp"
+                                    android:background="@drawable/shimmer_rounded_rectangle"/>
+
+                                <View
+                                    android:layout_width="40dp"
+                                    android:layout_height="14dp"
+                                    android:layout_marginTop="4dp"
+                                    android:background="@drawable/shimmer_rounded_rectangle"/>
+                            </LinearLayout>
+                        </LinearLayout>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Weather Details Grid Shimmer -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    app:cardCornerRadius="24dp"
+                    app:cardBackgroundColor="@color/shimmer_base_color"
+                    app:strokeColor="@color/shimmer_stroke_color"
+                    app:strokeWidth="1dp"
+                    app:cardElevation="8dp">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="16dp">
+
+                        <!-- Row 1 - Clouds and Humidity -->
+                        <com.google.android.material.card.MaterialCardView
+                            android:id="@+id/cloudsCardShimmer"
+                            android:layout_width="0dp"
+                            android:layout_height="110dp"
+                            android:layout_margin="12dp"
+                            app:cardCornerRadius="20dp"
+                            app:cardBackgroundColor="@color/shimmer_highlight_color"
+                            app:strokeColor="@color/shimmer_stroke_color"
+                            app:strokeWidth="1dp"
+                            app:cardElevation="6dp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toStartOf="@id/humidityCardShimmer"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:orientation="vertical"
+                                android:padding="16dp">
+
+                                <View
+                                    android:layout_width="32dp"
+                                    android:layout_height="32dp"
+                                    android:background="@drawable/shimmer_circle_shape"/>
+
+                                <View
+                                    android:layout_width="40dp"
+                                    android:layout_height="14dp"
+                                    android:layout_marginTop="8dp"
+                                    android:background="@drawable/shimmer_rounded_rectangle"/>
+
+                                <View
+                                    android:layout_width="50dp"
+                                    android:layout_height="11dp"
+                                    android:layout_marginTop="2dp"
+                                    android:background="@drawable/shimmer_rounded_rectangle"/>
+                            </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:id="@+id/humidityCardShimmer"
+                            android:layout_width="0dp"
+                            android:layout_height="110dp"
+                            android:layout_margin="12dp"
+                            app:cardCornerRadius="20dp"
+                            app:cardBackgroundColor="@color/shimmer_highlight_color"
+                            app:strokeColor="@color/shimmer_stroke_color"
+                            app:strokeWidth="1dp"
+                            app:cardElevation="6dp"
+                            app:layout_constraintStart_toEndOf="@id/cloudsCardShimmer"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:orientation="vertical"
+                                android:padding="16dp">
+
+                                <View
+                                    android:layout_width="32dp"
+                                    android:layout_height="32dp"
+                                    android:background="@drawable/shimmer_circle_shape"/>
+
+                                <View
+                                    android:layout_width="40dp"
+                                    android:layout_height="14dp"
+                                    android:layout_marginTop="8dp"
+                                    android:background="@drawable/shimmer_rounded_rectangle"/>
+
+                                <View
+                                    android:layout_width="50dp"
+                                    android:layout_height="11dp"
+                                    android:layout_marginTop="2dp"
+                                    android:background="@drawable/shimmer_rounded_rectangle"/>
+                            </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <!-- Row 2 - Wind Speed and Visibility -->
+                        <com.google.android.material.card.MaterialCardView
+                            android:id="@+id/windCardShimmer"
+                            android:layout_width="0dp"
+                            android:layout_height="110dp"
+                            android:layout_margin="12dp"
+                            app:cardCornerRadius="20dp"
+                            app:cardBackgroundColor="@color/shimmer_highlight_color"
+                            app:strokeColor="@color/shimmer_stroke_color"
+                            app:strokeWidth="1dp"
+                            app:cardElevation="6dp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toStartOf="@id/visibilityCardShimmer"
+                            app:layout_constraintTop_toBottomOf="@id/cloudsCardShimmer">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:orientation="vertical"
+                                android:padding="16dp">
+
+                                <View
+                                    android:layout_width="32dp"
+                                    android:layout_height="32dp"
+                                    android:background="@drawable/shimmer_circle_shape"/>
+
+                                <View
+                                    android:layout_width="40dp"
+                                    android:layout_height="14dp"
+                                    android:layout_marginTop="8dp"
+                                    android:background="@drawable/shimmer_rounded_rectangle"/>
+
+                                <View
+                                    android:layout_width="50dp"
+                                    android:layout_height="11dp"
+                                    android:layout_marginTop="2dp"
+                                    android:background="@drawable/shimmer_rounded_rectangle"/>
+                            </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:id="@+id/visibilityCardShimmer"
+                            android:layout_width="0dp"
+                            android:layout_height="110dp"
+                            android:layout_margin="12dp"
+                            app:cardCornerRadius="20dp"
+                            app:cardBackgroundColor="@color/shimmer_highlight_color"
+                            app:strokeColor="@color/shimmer_stroke_color"
+                            app:strokeWidth="1dp"
+                            app:cardElevation="6dp"
+                            app:layout_constraintStart_toEndOf="@id/windCardShimmer"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/humidityCardShimmer">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:orientation="vertical"
+                                android:padding="16dp">
+
+                                <View
+                                    android:layout_width="32dp"
+                                    android:layout_height="32dp"
+                                    android:background="@drawable/shimmer_circle_shape"/>
+
+                                <View
+                                    android:layout_width="40dp"
+                                    android:layout_height="14dp"
+                                    android:layout_marginTop="8dp"
+                                    android:background="@drawable/shimmer_rounded_rectangle"/>
+
+                                <View
+                                    android:layout_width="50dp"
+                                    android:layout_height="11dp"
+                                    android:layout_marginTop="2dp"
+                                    android:background="@drawable/shimmer_rounded_rectangle"/>
+                            </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <!-- Row 3 - Pressure and AQI -->
+                        <com.google.android.material.card.MaterialCardView
+                            android:id="@+id/pressureCardShimmer"
+                            android:layout_width="0dp"
+                            android:layout_height="110dp"
+                            android:layout_margin="12dp"
+                            app:cardCornerRadius="20dp"
+                            app:cardBackgroundColor="@color/shimmer_highlight_color"
+                            app:strokeColor="@color/shimmer_stroke_color"
+                            app:strokeWidth="1dp"
+                            app:cardElevation="6dp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toStartOf="@id/aqiCardShimmer"
+                            app:layout_constraintTop_toBottomOf="@id/windCardShimmer">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:orientation="vertical"
+                                android:padding="16dp">
+
+                                <View
+                                    android:layout_width="32dp"
+                                    android:layout_height="32dp"
+                                    android:background="@drawable/shimmer_circle_shape"/>
+
+                                <View
+                                    android:layout_width="40dp"
+                                    android:layout_height="14dp"
+                                    android:layout_marginTop="8dp"
+                                    android:background="@drawable/shimmer_rounded_rectangle"/>
+
+                                <View
+                                    android:layout_width="50dp"
+                                    android:layout_height="11dp"
+                                    android:layout_marginTop="2dp"
+                                    android:background="@drawable/shimmer_rounded_rectangle"/>
+                            </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:id="@+id/aqiCardShimmer"
+                            android:layout_width="0dp"
+                            android:layout_height="110dp"
+                            android:layout_margin="12dp"
+                            app:cardCornerRadius="20dp"
+                            app:cardBackgroundColor="@color/shimmer_highlight_color"
+                            app:strokeColor="@color/shimmer_stroke_color"
+                            app:strokeWidth="1dp"
+                            app:cardElevation="6dp"
+                            app:layout_constraintStart_toEndOf="@id/pressureCardShimmer"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/visibilityCardShimmer">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:orientation="vertical"
+                                android:padding="16dp">
+
+                                <View
+                                    android:layout_width="32dp"
+                                    android:layout_height="32dp"
+                                    android:background="@drawable/shimmer_circle_shape"/>
+
+                                <View
+                                    android:layout_width="40dp"
+                                    android:layout_height="14dp"
+                                    android:layout_marginTop="8dp"
+                                    android:background="@drawable/shimmer_rounded_rectangle"/>
+
+                                <View
+                                    android:layout_width="50dp"
+                                    android:layout_height="11dp"
+                                    android:layout_marginTop="2dp"
+                                    android:background="@drawable/shimmer_rounded_rectangle"/>
+                            </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </com.google.android.material.card.MaterialCardView>
+            </LinearLayout>
+        </ScrollView>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.facebook.shimmer.ShimmerFrameLayout>

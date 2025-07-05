@@ -13,4 +13,8 @@
     <color name="stroke_color">#0A7CA5</color> <!-- Slightly lighter for stroke -->
     <color name="color_background_color">#000000</color>
     <color name="text_color">#FFFFFF</color>
+
+    <color name="shimmer_base_color">@color/shimmer_base_color_dark</color>
+    <color name="shimmer_highlight_color">@color/shimmer_highlight_color_dark</color>
+    <color name="shimmer_stroke_color">@color/shimmer_stroke_color_dark</color>
 </resources>

@@ -9,609 +9,589 @@
     <!-- Shimmer layout -->
     <include layout="@layout/skeleton_weather_screen" />
 
-    <!-- Main content -->
-    <LinearLayout
+    <!-- Main content with ConstraintLayout as root -->
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/mainlayout"
-        android:orientation="vertical"
-        android:visibility="gone"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:background="@color/color_background_color"
+        android:padding="12dp">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/main"
+        <!-- Search Section -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/searchContainer"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/color_background_color"
-            android:padding="12dp">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:elevation="8dp"
+            android:hint="@string/enter_city"
+            android:textColorHint="@color/text_color"
+            app:boxBackgroundColor="@color/color_background_color"
+            app:boxCornerRadiusBottomEnd="20dp"
+            app:boxCornerRadiusBottomStart="20dp"
+            app:boxCornerRadiusTopEnd="20dp"
+            app:boxCornerRadiusTopStart="20dp"
+            app:boxStrokeColor="@color/persistent_stroke_color"
+            app:boxStrokeWidth="1dp"
+            app:endIconDrawable="@drawable/search_icon_enhanced"
+            app:endIconMode="custom"
+            app:endIconTint="@color/accent_color"
+            app:hintTextColor="@color/accent_color"
+            app:startIconDrawable="@drawable/location_icon_enhanced"
+            app:startIconTint="@color/accent_color"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-            <LinearLayout
-                android:id="@+id/search_layout"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/searchCity"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                android:autofillHints="name"
+                android:fontFamily="@font/roboto_medium"
+                android:gravity="center_vertical"
+                android:imeOptions="actionSend"
+                android:inputType="textCapWords|textAutoComplete"
+                android:paddingStart="60dp"
+                android:paddingTop="16dp"
+                android:paddingEnd="60dp"
+                android:paddingBottom="16dp"
+                android:textColor="@color/text_color"
+                android:textSize="16sp" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-                <!-- Enhanced Search Section with Glass Morphism Effect -->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/searchContainer"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="32dp"
-                    android:elevation="8dp"
-                    android:hint="@string/enter_city"
-                    android:textColorHint="@color/text_color"
-                    app:boxBackgroundColor="@color/color_background_color"
-                    app:boxCornerRadiusBottomEnd="20dp"
-                    app:boxCornerRadiusBottomStart="20dp"
-                    app:boxCornerRadiusTopEnd="20dp"
-                    app:boxCornerRadiusTopStart="20dp"
-                    app:boxStrokeColor="@color/persistent_stroke_color"
-                    app:boxStrokeWidth="1dp"
-                    app:endIconDrawable="@drawable/search_icon_enhanced"
-                    app:endIconMode="custom"
-                    app:endIconTint="@color/accent_color"
-                    app:hintTextColor="@color/accent_color"
-                    app:startIconDrawable="@drawable/location_icon_enhanced"
-                    app:startIconTint="@color/accent_color">
+        <!-- ScrollView with optimized constraints -->
+        <ScrollView
+            android:id="@+id/scrollView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:fillViewport="true"
+            android:overScrollMode="never"
+            android:scrollbars="none"
+            app:layout_constraintTop_toBottomOf="@+id/searchContainer"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/searchCity"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:autofillHints="name"
-                        android:fontFamily="@font/roboto_medium"
-                        android:gravity="center_vertical"
-                        android:imeOptions="actionSend"
-                        android:inputType="textCapWords|textAutoComplete"
-                        android:paddingStart="60dp"
-                        android:paddingTop="16dp"
-                        android:paddingEnd="60dp"
-                        android:paddingBottom="16dp"
-                        android:textColor="@color/text_color"
-                        android:textSize="16sp" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-            </LinearLayout>
-
-            <!-- FIX 1: Add proper constraints to ScrollView -->
-            <ScrollView
+            <!-- Single LinearLayout container -->
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:fillViewport="true"
-                android:overScrollMode="never"
-                android:scrollbars="none"
-                app:layout_constraintTop_toBottomOf="@+id/search_layout"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent">
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingBottom="24dp">
 
-                <LinearLayout
+                <!-- Current Weather Card - Flattened structure -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardCurrentWeather"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:paddingBottom="24dp">
+                    android:layout_marginTop="28dp"
+                    app:cardCornerRadius="24dp"
+                    app:cardBackgroundColor="@color/weather_card_background"
+                    app:cardElevation="12dp"
+                    app:strokeColor="@color/card_stroke_color"
+                    app:strokeWidth="1dp"
+                    android:background="@drawable/weather_card_gradient">
 
-                    <!-- Enhanced Current Weather Card with Gradient Background -->
-                    <com.google.android.material.card.MaterialCardView
-                        android:id="@+id/cardCurrentWeather"
+                    <!-- Use ConstraintLayout directly, remove extra nesting -->
+                    <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="28dp"
-                        app:cardCornerRadius="24dp"
-                        app:cardBackgroundColor="@color/weather_card_background"
-                        app:cardElevation="12dp"
-                        app:strokeColor="@color/card_stroke_color"
-                        app:strokeWidth="1dp"
+                        android:padding="28dp"
                         android:background="@drawable/weather_card_gradient">
 
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                            android:id="@+id/middleconstraint"
-                            android:layout_width="match_parent"
+                        <TextView
+                            android:id="@+id/nowLabel"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:padding="28dp"
-                            android:background="@drawable/weather_card_gradient">
+                            android:text="@string/now"
+                            android:textColor="@color/text_color"
+                            android:textSize="14sp"
+                            android:textStyle="normal"
+                            android:letterSpacing="0.1"
+                            android:fontFamily="@font/roboto_medium"
+                            android:textAllCaps="true"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
 
-                            <!-- Enhanced Header Section -->
-                            <TextView
-                                android:id="@+id/nowLabel"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/now"
-                                android:textColor="@color/text_color"
-                                android:textSize="14sp"
-                                android:textStyle="normal"
-                                android:letterSpacing="0.1"
-                                android:fontFamily="@font/roboto_medium"
-                                android:textAllCaps="true"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
+                        <TextView
+                            android:id="@+id/cityName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:hint="@string/city_name"
+                            android:textColor="@color/text_color"
+                            android:textSize="28sp"
+                            android:textStyle="bold"
+                            android:letterSpacing="0.01"
+                            android:fontFamily="@font/roboto_bold"
+                            app:layout_constraintStart_toStartOf="@id/nowLabel"
+                            app:layout_constraintTop_toBottomOf="@id/nowLabel" />
 
-                            <!-- Enhanced Location Info -->
-                            <TextView
-                                android:id="@+id/cityName"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="8dp"
-                                android:hint="@string/city_name"
-                                android:textColor="@color/text_color"
-                                android:textSize="28sp"
-                                android:textStyle="bold"
-                                android:letterSpacing="0.01"
-                                android:fontFamily="@font/roboto_bold"
-                                app:layout_constraintStart_toStartOf="@id/nowLabel"
-                                app:layout_constraintTop_toBottomOf="@id/nowLabel" />
+                        <TextView
+                            android:id="@+id/stateName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:hint="@string/stateName"
+                            android:textColor="@color/text_color"
+                            android:textSize="16sp"
+                            android:fontFamily="@font/roboto_regular"
+                            app:layout_constraintStart_toStartOf="@id/cityName"
+                            app:layout_constraintTop_toBottomOf="@id/cityName" />
 
-                            <TextView
-                                android:id="@+id/stateName"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="4dp"
-                                android:hint="@string/stateName"
-                                android:textColor="@color/text_color"
-                                android:textSize="16sp"
-                                android:fontFamily="@font/roboto_regular"
-                                app:layout_constraintStart_toStartOf="@id/cityName"
-                                app:layout_constraintTop_toBottomOf="@id/cityName" />
+                        <TextView
+                            android:id="@+id/mainTemp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="24dp"
+                            android:hint="@string/_0_c"
+                            android:textColor="@color/text_color"
+                            android:textSize="72sp"
+                            android:textStyle="normal"
+                            android:letterSpacing="-0.02"
+                            android:fontFamily="@font/roboto_thin"
+                            app:layout_constraintStart_toStartOf="@id/cityName"
+                            app:layout_constraintTop_toBottomOf="@id/stateName" />
 
-                            <!-- Enhanced Temperature Section -->
-                            <TextView
-                                android:id="@+id/mainTemp"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="24dp"
-                                android:hint="@string/_0_c"
-                                android:textColor="@color/text_color"
-                                android:textSize="72sp"
-                                android:textStyle="normal"
-                                android:letterSpacing="-0.02"
-                                android:fontFamily="@font/roboto_thin"
-                                app:layout_constraintStart_toStartOf="@id/cityName"
-                                app:layout_constraintTop_toBottomOf="@id/stateName" />
+                        <ImageView
+                            android:visibility="gone"
+                            android:id="@+id/weathericon"
+                            android:layout_width="80dp"
+                            android:layout_height="80dp"
+                            android:layout_marginStart="20dp"
+                            android:contentDescription="@string/weather_img"
+                            android:src="@drawable/weather_icon_enhanced"
+                            android:scaleType="fitCenter"
+                            app:layout_constraintBottom_toBottomOf="@id/mainTemp"
+                            app:layout_constraintStart_toEndOf="@id/mainTemp"
+                            app:layout_constraintTop_toTopOf="@id/mainTemp"
+                            app:tint="@color/weather_icon_color" />
 
-                            <!-- Enhanced Weather Icon with Animation -->
-                            <ImageView
-                                android:visibility="gone"
-                                android:id="@+id/weathericon"
-                                android:layout_width="80dp"
-                                android:layout_height="80dp"
-                                android:layout_marginStart="20dp"
-                                android:contentDescription="@string/weather_img"
-                                android:src="@drawable/weather_icon_enhanced"
-                                android:scaleType="fitCenter"
-                                app:layout_constraintBottom_toBottomOf="@id/mainTemp"
-                                app:layout_constraintStart_toEndOf="@id/mainTemp"
-                                app:layout_constraintTop_toTopOf="@id/mainTemp"
-                                app:tint="@color/weather_icon_color" />
+                        <TextView
+                            android:id="@+id/maxandminTemp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:hint="@string/temp"
+                            android:textColor="@color/secondary_text_color"
+                            android:textSize="16sp"
+                            android:fontFamily="@font/roboto_medium"
+                            app:layout_constraintStart_toStartOf="@id/mainTemp"
+                            app:layout_constraintTop_toBottomOf="@id/mainTemp" />
 
-                            <!-- Enhanced Secondary Weather Info -->
-                            <TextView
-                                android:id="@+id/maxandminTemp"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="8dp"
-                                android:hint="@string/temp"
-                                android:textColor="@color/secondary_text_color"
-                                android:textSize="16sp"
-                                android:fontFamily="@font/roboto_medium"
-                                app:layout_constraintStart_toStartOf="@id/mainTemp"
-                                app:layout_constraintTop_toBottomOf="@id/mainTemp" />
+                        <TextView
+                            android:id="@+id/skydispcrit"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/weather"
+                            android:textColor="@color/text_color"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:gravity="end"
+                            android:fontFamily="@font/roboto_medium"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/nowLabel" />
 
-                            <!-- Enhanced Weather Details Right Side -->
-                            <TextView
-                                android:id="@+id/skydispcrit"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:hint="@string/weather"
-                                android:textColor="@color/text_color"
-                                android:textSize="18sp"
-                                android:textStyle="bold"
-                                android:gravity="end"
-                                android:fontFamily="@font/roboto_medium"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintTop_toBottomOf="@id/nowLabel" />
+                        <TextView
+                            android:id="@+id/feelsLike"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:hint="@string/feel_like"
+                            android:textColor="@color/text_color"
+                            android:textSize="14sp"
+                            android:gravity="end"
+                            android:fontFamily="@font/roboto_regular"
+                            app:layout_constraintEnd_toEndOf="@id/skydispcrit"
+                            app:layout_constraintTop_toBottomOf="@id/skydispcrit" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </com.google.android.material.card.MaterialCardView>
 
-                            <TextView
-                                android:id="@+id/feelsLike"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="8dp"
-                                android:hint="@string/feel_like"
-                                android:textColor="@color/text_color"
-                                android:textSize="14sp"
-                                android:gravity="end"
-                                android:fontFamily="@font/roboto_regular"
-                                app:layout_constraintEnd_toEndOf="@id/skydispcrit"
-                                app:layout_constraintTop_toBottomOf="@id/skydispcrit" />
-                        </androidx.constraintlayout.widget.ConstraintLayout>
-                    </com.google.android.material.card.MaterialCardView>
+                <!-- 3 Hour Forecast Card -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardAdditionalInfo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    app:cardCornerRadius="24dp"
+                    app:cardElevation="12dp"
+                    app:strokeColor="@color/card_stroke_color"
+                    app:strokeWidth="1dp"
+                    app:cardBackgroundColor="@color/color_background_color">
 
-                    <!-- 3 Hour Forecast Card -->
-                    <com.google.android.material.card.MaterialCardView
-                        android:id="@+id/cardAdditionalInfo"
+                    <!-- Use ConstraintLayout instead of LinearLayout -->
+                    <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        app:cardCornerRadius="24dp"
-                        app:cardElevation="12dp"
-                        app:strokeColor="@color/card_stroke_color"
-                        app:strokeWidth="1dp"
-                        app:cardBackgroundColor="@color/color_background_color">
+                        android:padding="16dp">
 
-                        <LinearLayout
+                        <TextView
+                            android:id="@+id/forecastTitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:text="@string/_3_hour_forecast"
+                            android:textColor="@color/text_color"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:fontFamily="@font/roboto_regular"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/forecast_hour"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:padding="16dp">
+                            android:layout_marginTop="10dp"
+                            android:nestedScrollingEnabled="false"
+                            android:overScrollMode="never"
+                            android:scrollbars="horizontal"
+                            app:layout_constraintTop_toBottomOf="@id/forecastTitle"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </com.google.android.material.card.MaterialCardView>
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="10dp"
-                                android:text="@string/_3_hour_forecast"
-                                android:textColor="@color/text_color"
-                                android:textSize="16sp"
-                                android:textStyle="bold"
-                                android:fontFamily="@font/roboto_regular"/>
+                <!-- Weather Details Grid Card - Using ConstraintLayout Grid Pattern -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    app:cardCornerRadius="24dp"
+                    app:cardElevation="8dp"
+                    app:strokeColor="@color/card_stroke_color"
+                    app:strokeWidth="1dp"
+                    android:backgroundTint="@color/details_card_background">
 
-                            <!-- FIX 2: Properly configure RecyclerView -->
-                            <androidx.recyclerview.widget.RecyclerView
-                                android:id="@+id/forecast_hour"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="10dp"
-                                android:nestedScrollingEnabled="false"
-                                android:overScrollMode="never"
-                                android:scrollbars="horizontal"/>
-                        </LinearLayout>
-                    </com.google.android.material.card.MaterialCardView>
-
-                    <!-- Weather Details Grid Card -->
-                    <com.google.android.material.card.MaterialCardView
+                    <!-- Replace nested LinearLayouts with ConstraintLayout grid -->
+                    <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp"
-                        app:cardCornerRadius="24dp"
-                        app:cardElevation="8dp"
-                        app:strokeColor="@color/card_stroke_color"
-                        app:strokeWidth="1dp"
-                        android:backgroundTint="@color/details_card_background">
+                        android:padding="12dp"
+                        android:background="@color/color_background_color">
 
-                        <!-- FIX 3: Replace GridLayout with better alternative -->
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:padding="16dp"
-                            android:background="@color/color_background_color">
+                        <!-- Row 1 - Clouds and Humidity -->
+                        <com.google.android.material.card.MaterialCardView
+                            android:id="@+id/cloudsCard"
+                            android:layout_width="0dp"
+                            android:layout_height="110dp"
+                            android:layout_margin="12dp"
+                            app:cardCornerRadius="20dp"
+                            app:cardElevation="6dp"
+                            app:cardBackgroundColor="@color/color_background_color"
+                            app:strokeColor="@color/detail_card_stroke"
+                            app:strokeWidth="1dp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toStartOf="@id/humidityCard"
+                            app:layout_constraintTop_toTopOf="parent">
 
-                            <!-- Row 1 -->
+                            <!-- Flatten the LinearLayout structure -->
                             <LinearLayout
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal"
-                                android:layout_marginBottom="12dp">
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:orientation="vertical"
+                                android:padding="16dp">
 
-                                <!-- Enhanced Clouds Card -->
-                                <com.google.android.material.card.MaterialCardView
-                                    android:layout_width="0dp"
-                                    android:layout_height="110dp"
-                                    android:layout_weight="1"
-                                    android:layout_marginEnd="6dp"
-                                    app:cardCornerRadius="20dp"
-                                    app:cardElevation="6dp"
-                                    app:cardBackgroundColor="@color/color_background_color"
-                                    app:strokeColor="@color/detail_card_stroke"
-                                    app:strokeWidth="1dp">
+                                <ImageView
+                                    android:id="@+id/cloudsIcon"
+                                    android:layout_width="32dp"
+                                    android:layout_height="32dp"
+                                    android:contentDescription="@string/cloud"
+                                    android:src="@drawable/clouds_icon_enhanced" />
 
-                                    <LinearLayout
-                                        android:layout_width="match_parent"
-                                        android:layout_height="match_parent"
-                                        android:gravity="center"
-                                        android:orientation="vertical"
-                                        android:padding="16dp">
+                                <TextView
+                                    android:id="@+id/clouds_value"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="8dp"
+                                    android:hint="@string/clouds"
+                                    android:textColor="@color/text_color"
+                                    android:textSize="14sp"
+                                    android:fontFamily="@font/roboto_medium"
+                                    android:gravity="center" />
 
-                                        <ImageView
-                                            android:id="@+id/cloudsIcon"
-                                            android:layout_width="32dp"
-                                            android:layout_height="32dp"
-                                            android:contentDescription="@string/cloud"
-                                            android:src="@drawable/clouds_icon_enhanced" />
-
-                                        <TextView
-                                            android:id="@+id/clouds_value"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:layout_marginTop="8dp"
-                                            android:hint="@string/clouds"
-                                            android:textColor="@color/text_color"
-                                            android:textSize="14sp"
-                                            android:fontFamily="@font/roboto_medium"
-                                            android:gravity="center" />
-
-                                        <TextView
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:text="@string/clouds"
-                                            android:textColor="@color/text_color"
-                                            android:textSize="11sp"
-                                            android:fontFamily="@font/roboto_regular"
-                                            android:layout_marginTop="2dp"
-                                            android:textAllCaps="true"
-                                            android:letterSpacing="0.1" />
-                                    </LinearLayout>
-                                </com.google.android.material.card.MaterialCardView>
-
-                                <!-- Enhanced Humidity Card -->
-                                <com.google.android.material.card.MaterialCardView
-                                    android:layout_width="0dp"
-                                    android:layout_height="110dp"
-                                    android:layout_weight="1"
-                                    android:layout_marginStart="6dp"
-                                    app:cardCornerRadius="20dp"
-                                    app:cardElevation="6dp"
-                                    app:cardBackgroundColor="@color/color_background_color"
-                                    app:strokeColor="@color/detail_card_stroke"
-                                    app:strokeWidth="1dp">
-
-                                    <LinearLayout
-                                        android:layout_width="match_parent"
-                                        android:layout_height="match_parent"
-                                        android:gravity="center"
-                                        android:orientation="vertical"
-                                        android:padding="16dp">
-
-                                        <ImageView
-                                            android:id="@+id/humidityIcon"
-                                            android:layout_width="32dp"
-                                            android:layout_height="32dp"
-                                            android:contentDescription="@string/humidity"
-                                            android:src="@drawable/humidity_icon_enhanced"/>
-
-                                        <TextView
-                                            android:id="@+id/humidity_value"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:layout_marginTop="8dp"
-                                            android:hint="@string/humidity"
-                                            android:textColor="@color/text_color"
-                                            android:textSize="14sp"
-                                            android:fontFamily="@font/roboto_medium"
-                                            android:gravity="center" />
-
-                                        <TextView
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:text="@string/humidity"
-                                            android:textColor="@color/text_color"
-                                            android:textSize="11sp"
-                                            android:fontFamily="@font/roboto_regular"
-                                            android:layout_marginTop="2dp"
-                                            android:textAllCaps="true"
-                                            android:letterSpacing="0.1" />
-                                    </LinearLayout>
-                                </com.google.android.material.card.MaterialCardView>
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/clouds"
+                                    android:textColor="@color/text_color"
+                                    android:textSize="11sp"
+                                    android:fontFamily="@font/roboto_regular"
+                                    android:layout_marginTop="2dp"
+                                    android:textAllCaps="true"
+                                    android:letterSpacing="0.1" />
                             </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
 
-                            <!-- Row 2 -->
+                        <com.google.android.material.card.MaterialCardView
+                            android:id="@+id/humidityCard"
+                            android:layout_width="0dp"
+                            android:layout_height="110dp"
+                            android:layout_margin="12dp"
+                            app:cardCornerRadius="20dp"
+                            app:cardElevation="6dp"
+                            app:cardBackgroundColor="@color/color_background_color"
+                            app:strokeColor="@color/detail_card_stroke"
+                            app:strokeWidth="1dp"
+                            app:layout_constraintStart_toEndOf="@id/cloudsCard"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
+
                             <LinearLayout
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal"
-                                android:layout_marginBottom="12dp">
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:orientation="vertical"
+                                android:padding="16dp">
 
-                                <!-- Enhanced Wind Speed Card -->
-                                <com.google.android.material.card.MaterialCardView
-                                    android:layout_width="0dp"
-                                    android:layout_height="110dp"
-                                    android:layout_weight="1"
-                                    android:layout_marginEnd="6dp"
-                                    app:cardCornerRadius="20dp"
-                                    app:cardElevation="6dp"
-                                    app:cardBackgroundColor="@color/color_background_color"
-                                    app:strokeColor="@color/detail_card_stroke"
-                                    app:strokeWidth="1dp">
+                                <ImageView
+                                    android:id="@+id/humidityIcon"
+                                    android:layout_width="32dp"
+                                    android:layout_height="32dp"
+                                    android:contentDescription="@string/humidity"
+                                    android:src="@drawable/humidity_icon_enhanced"/>
 
-                                    <LinearLayout
-                                        android:layout_width="match_parent"
-                                        android:layout_height="match_parent"
-                                        android:gravity="center"
-                                        android:orientation="vertical"
-                                        android:padding="16dp">
+                                <TextView
+                                    android:id="@+id/humidity_value"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="8dp"
+                                    android:hint="@string/humidity"
+                                    android:textColor="@color/text_color"
+                                    android:textSize="14sp"
+                                    android:fontFamily="@font/roboto_medium"
+                                    android:gravity="center" />
 
-                                        <ImageView
-                                            android:id="@+id/windIcon"
-                                            android:layout_width="32dp"
-                                            android:layout_height="32dp"
-                                            android:contentDescription="@string/wind"
-                                            android:src="@drawable/wind_icon_enhanced" />
-
-                                        <TextView
-                                            android:id="@+id/windspeed"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:layout_marginTop="8dp"
-                                            android:hint="@string/wind_speed"
-                                            android:textColor="@color/text_color"
-                                            android:textSize="14sp"
-                                            android:fontFamily="@font/roboto_medium"
-                                            android:gravity="center" />
-
-                                        <TextView
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:text="@string/wind_speed"
-                                            android:textColor="@color/text_color"
-                                            android:textSize="11sp"
-                                            android:fontFamily="@font/roboto_regular"
-                                            android:layout_marginTop="2dp"
-                                            android:textAllCaps="true"
-                                            android:letterSpacing="0.1" />
-                                    </LinearLayout>
-                                </com.google.android.material.card.MaterialCardView>
-
-                                <!-- Enhanced Visibility Card -->
-                                <com.google.android.material.card.MaterialCardView
-                                    android:layout_width="0dp"
-                                    android:layout_height="110dp"
-                                    android:layout_weight="1"
-                                    android:layout_marginStart="6dp"
-                                    app:cardCornerRadius="20dp"
-                                    app:cardElevation="6dp"
-                                    app:cardBackgroundColor="@color/color_background_color"
-                                    app:strokeColor="@color/detail_card_stroke"
-                                    app:strokeWidth="1dp">
-
-                                    <LinearLayout
-                                        android:layout_width="match_parent"
-                                        android:layout_height="match_parent"
-                                        android:gravity="center"
-                                        android:orientation="vertical"
-                                        android:padding="16dp">
-
-                                        <ImageView
-                                            android:id="@+id/visibilityIcon"
-                                            android:layout_width="32dp"
-                                            android:layout_height="32dp"
-                                            android:contentDescription="@string/visibility"
-                                            android:src="@drawable/visibility_icon_enhanced" />
-
-                                        <TextView
-                                            android:id="@+id/visibility_value"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:layout_marginTop="8dp"
-                                            android:hint="@string/visibility"
-                                            android:textColor="@color/text_color"
-                                            android:textSize="14sp"
-                                            android:fontFamily="@font/roboto_medium"
-                                            android:gravity="center" />
-
-                                        <TextView
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:text="@string/visibility"
-                                            android:textColor="@color/text_color"
-                                            android:textSize="11sp"
-                                            android:fontFamily="@font/roboto_regular"
-                                            android:layout_marginTop="2dp"
-                                            android:textAllCaps="true"
-                                            android:letterSpacing="0.1" />
-                                    </LinearLayout>
-                                </com.google.android.material.card.MaterialCardView>
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/humidity"
+                                    android:textColor="@color/text_color"
+                                    android:textSize="11sp"
+                                    android:fontFamily="@font/roboto_regular"
+                                    android:layout_marginTop="2dp"
+                                    android:textAllCaps="true"
+                                    android:letterSpacing="0.1" />
                             </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
 
-                            <!-- Row 3 -->
+                        <!-- Row 2 - Wind Speed and Visibility -->
+                        <com.google.android.material.card.MaterialCardView
+                            android:id="@+id/windCard"
+                            android:layout_width="0dp"
+                            android:layout_height="110dp"
+                            android:layout_margin="12dp"
+                            app:cardCornerRadius="20dp"
+                            app:cardElevation="6dp"
+                            app:cardBackgroundColor="@color/color_background_color"
+                            app:strokeColor="@color/detail_card_stroke"
+                            app:strokeWidth="1dp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toStartOf="@id/visibilityCard"
+                            app:layout_constraintTop_toBottomOf="@id/cloudsCard">
+
                             <LinearLayout
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal">
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:orientation="vertical"
+                                android:padding="16dp">
 
-                                <!-- Enhanced Pressure Card -->
-                                <com.google.android.material.card.MaterialCardView
-                                    android:layout_width="0dp"
-                                    android:layout_height="110dp"
-                                    android:layout_weight="1"
-                                    android:layout_marginEnd="6dp"
-                                    app:cardCornerRadius="20dp"
-                                    app:cardElevation="6dp"
-                                    app:cardBackgroundColor="@color/color_background_color"
-                                    app:strokeColor="@color/detail_card_stroke"
-                                    app:strokeWidth="1dp">
+                                <ImageView
+                                    android:id="@+id/windIcon"
+                                    android:layout_width="32dp"
+                                    android:layout_height="32dp"
+                                    android:contentDescription="@string/wind"
+                                    android:src="@drawable/wind_icon_enhanced" />
 
-                                    <LinearLayout
-                                        android:layout_width="match_parent"
-                                        android:layout_height="match_parent"
-                                        android:gravity="center"
-                                        android:orientation="vertical"
-                                        android:padding="16dp">
+                                <TextView
+                                    android:id="@+id/windspeed"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="8dp"
+                                    android:hint="@string/wind_speed"
+                                    android:textColor="@color/text_color"
+                                    android:textSize="14sp"
+                                    android:fontFamily="@font/roboto_medium"
+                                    android:gravity="center" />
 
-                                        <ImageView
-                                            android:id="@+id/pressureIcon"
-                                            android:layout_width="32dp"
-                                            android:layout_height="32dp"
-                                            android:contentDescription="@string/pressure"
-                                            android:src="@drawable/pressure_icon_enhanced" />
-
-                                        <TextView
-                                            android:id="@+id/pressure_value"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:layout_marginTop="8dp"
-                                            android:hint="@string/pressure"
-                                            android:textColor="@color/text_color"
-                                            android:textSize="14sp"
-                                            android:fontFamily="@font/roboto_medium"
-                                            android:gravity="center" />
-
-                                        <TextView
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:text="@string/pressure"
-                                            android:textColor="@color/text_color"
-                                            android:textSize="11sp"
-                                            android:fontFamily="@font/roboto_regular"
-                                            android:layout_marginTop="2dp"
-                                            android:textAllCaps="true"
-                                            android:letterSpacing="0.1" />
-                                    </LinearLayout>
-                                </com.google.android.material.card.MaterialCardView>
-
-                                <!-- Enhanced AQI Card -->
-                                <com.google.android.material.card.MaterialCardView
-                                    android:layout_width="0dp"
-                                    android:layout_height="110dp"
-                                    android:layout_weight="1"
-                                    android:layout_marginStart="6dp"
-                                    app:cardCornerRadius="20dp"
-                                    app:cardElevation="6dp"
-                                    app:cardBackgroundColor="@color/color_background_color"
-                                    app:strokeColor="@color/detail_card_stroke"
-                                    app:strokeWidth="1dp">
-
-                                    <LinearLayout
-                                        android:layout_width="match_parent"
-                                        android:layout_height="match_parent"
-                                        android:gravity="center"
-                                        android:orientation="vertical"
-                                        android:padding="16dp">
-
-                                        <ImageView
-                                            android:id="@+id/AQI"
-                                            android:layout_width="32dp"
-                                            android:layout_height="32dp"
-                                            android:contentDescription="@string/AQI_value"
-                                            android:src="@drawable/aqi"/>
-
-                                        <TextView
-                                            android:id="@+id/AQI_value"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:layout_marginTop="8dp"
-                                            android:hint="@string/AQI_value"
-                                            android:textColor="@color/text_color"
-                                            android:textSize="14sp"
-                                            android:fontFamily="@font/roboto_medium"
-                                            android:gravity="center" />
-
-                                        <TextView
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:text="@string/AQI_value"
-                                            android:textColor="@color/text_color"
-                                            android:textSize="11sp"
-                                            android:fontFamily="@font/roboto_regular"
-                                            android:layout_marginTop="2dp"
-                                            android:textAllCaps="true"
-                                            android:letterSpacing="0.1" />
-                                    </LinearLayout>
-                                </com.google.android.material.card.MaterialCardView>
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/wind_speed"
+                                    android:textColor="@color/text_color"
+                                    android:textSize="11sp"
+                                    android:fontFamily="@font/roboto_regular"
+                                    android:layout_marginTop="2dp"
+                                    android:textAllCaps="true"
+                                    android:letterSpacing="0.1" />
                             </LinearLayout>
-                        </LinearLayout>
-                    </com.google.android.material.card.MaterialCardView>
-                </LinearLayout>
-            </ScrollView>
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:id="@+id/visibilityCard"
+                            android:layout_width="0dp"
+                            android:layout_height="110dp"
+                            android:layout_margin="12dp"
+                            app:cardCornerRadius="20dp"
+                            app:cardElevation="6dp"
+                            app:cardBackgroundColor="@color/color_background_color"
+                            app:strokeColor="@color/detail_card_stroke"
+                            app:strokeWidth="1dp"
+                            app:layout_constraintStart_toEndOf="@id/windCard"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/humidityCard">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:orientation="vertical"
+                                android:padding="16dp">
+
+                                <ImageView
+                                    android:id="@+id/visibilityIcon"
+                                    android:layout_width="32dp"
+                                    android:layout_height="32dp"
+                                    android:contentDescription="@string/visibility"
+                                    android:src="@drawable/visibility_icon_enhanced" />
+
+                                <TextView
+                                    android:id="@+id/visibility_value"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="8dp"
+                                    android:hint="@string/visibility"
+                                    android:textColor="@color/text_color"
+                                    android:textSize="14sp"
+                                    android:fontFamily="@font/roboto_medium"
+                                    android:gravity="center" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/visibility"
+                                    android:textColor="@color/text_color"
+                                    android:textSize="11sp"
+                                    android:fontFamily="@font/roboto_regular"
+                                    android:layout_marginTop="2dp"
+                                    android:textAllCaps="true"
+                                    android:letterSpacing="0.1" />
+                            </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <!-- Row 3 - Pressure and AQI -->
+                        <com.google.android.material.card.MaterialCardView
+                            android:id="@+id/pressureCard"
+                            android:layout_width="0dp"
+                            android:layout_height="110dp"
+                            android:layout_margin="12dp"
+                            app:cardCornerRadius="20dp"
+                            app:cardElevation="4dp"
+                            app:cardBackgroundColor="@color/color_background_color"
+                            app:strokeColor="@color/detail_card_stroke"
+                            app:strokeWidth="1dp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toStartOf="@id/aqiCard"
+                            app:layout_constraintTop_toBottomOf="@id/windCard">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:orientation="vertical"
+                                android:padding="16dp">
+
+                                <ImageView
+                                    android:id="@+id/pressureIcon"
+                                    android:layout_width="32dp"
+                                    android:layout_height="32dp"
+                                    android:contentDescription="@string/pressure"
+                                    android:src="@drawable/pressure_icon_enhanced" />
+
+                                <TextView
+                                    android:id="@+id/pressure_value"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="8dp"
+                                    android:hint="@string/pressure"
+                                    android:textColor="@color/text_color"
+                                    android:textSize="14sp"
+                                    android:fontFamily="@font/roboto_medium"
+                                    android:gravity="center" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/pressure"
+                                    android:textColor="@color/text_color"
+                                    android:textSize="11sp"
+                                    android:fontFamily="@font/roboto_regular"
+                                    android:layout_marginTop="2dp"
+                                    android:textAllCaps="true"
+                                    android:letterSpacing="0.1" />
+                            </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:id="@+id/aqiCard"
+                            android:layout_width="0dp"
+                            android:layout_height="110dp"
+                            android:layout_margin="12dp"
+                            app:cardCornerRadius="20dp"
+                            app:cardElevation="4dp"
+                            app:cardBackgroundColor="@color/color_background_color"
+                            app:strokeColor="@color/detail_card_stroke"
+                            app:strokeWidth="1dp"
+                            app:layout_constraintStart_toEndOf="@id/pressureCard"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/visibilityCard">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:orientation="vertical"
+                                android:padding="16dp">
+
+                                <ImageView
+                                    android:id="@+id/AQI"
+                                    android:layout_width="32dp"
+                                    android:layout_height="32dp"
+                                    android:contentDescription="@string/AQI_value"
+                                    android:src="@drawable/aqi"/>
+
+                                <TextView
+                                    android:id="@+id/AQI_value"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="8dp"
+                                    android:hint="@string/AQI_value"
+                                    android:textColor="@color/text_color"
+                                    android:textSize="14sp"
+                                    android:fontFamily="@font/roboto_medium"
+                                    android:gravity="center" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/AQI_value"
+                                    android:textColor="@color/text_color"
+                                    android:textSize="11sp"
+                                    android:fontFamily="@font/roboto_regular"
+                                    android:layout_marginTop="2dp"
+                                    android:textAllCaps="true"
+                                    android:letterSpacing="0.1" />
+                            </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </com.google.android.material.card.MaterialCardView>
+            </LinearLayout>
+        </ScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>
