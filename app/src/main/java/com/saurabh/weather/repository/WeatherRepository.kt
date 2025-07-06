@@ -10,7 +10,7 @@ class WeatherRepository(private val apiService: ApiServices) {
 
     private val apikey = "8141f502ab11cace94aa0f8d5ab1c7ca"
 
-    suspend fun getForcastData(lat: Double, lon: Double): WeatherResponse {
+    suspend fun getCurrentData(lat: Double, lon: Double): WeatherResponse {
         return apiService.getWeatherData(lat, lon, apikey)
     }
     suspend fun weatherFromCityName(cityName: String): WeatherResponse{

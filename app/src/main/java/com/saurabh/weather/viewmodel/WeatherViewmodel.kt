@@ -22,7 +22,7 @@ class WeatherViewmodel(private val repository: WeatherRepository) : ViewModel() 
     fun getWeatherData(lat: Double, lon: Double) {
         viewModelScope.launch {
             try {
-                val response = repository.getForcastData(lat, lon)
+                val response = repository.getCurrentData(lat, lon)
                 _response.value = response
             } catch (e: Exception) {
                 _error.value = e.message
