@@ -47,6 +47,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var shimmerLayout: ShimmerFrameLayout
     private lateinit var adapter: WeatherForecastAdapter
     private val toolbox = MethodLibrary()
+    private var isRefreshing = false // Track refresh state
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,6 +55,9 @@ class MainActivity : AppCompatActivity() {
         enableEdgeToEdge()
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        // Setup SwipeRefreshLayout
+        setupSwipeRefresh()
 
         // Initialize shimmer layout
         val view = LayoutInflater.from(this).inflate(R.layout.skeleton_weather_screen, binding.mainlayout, false)
@@ -88,6 +92,43 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun setupSwipeRefresh() {
+        binding.swipeRefresh.setOnRefreshListener {
+            isRefreshing = true
+            refreshWeatherData()
+        }
+
+        // Optional: Customize refresh colors
+        binding.swipeRefresh.setColorSchemeResources(
+            R.color.accent_color,
+            R.color.text_color
+        )
+    }
+
+    private fun refreshWeatherData() {
+        // If we have location permissions, get current location data
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED &&
+            ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            getUserLocation()
+        } else {
+            // If no location permission, just stop the refresh indicator
+            stopRefreshing()
+            Toast.makeText(this, "Location permission needed for refresh", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun stopRefreshing() {
+        isRefreshing = false
+        binding.swipeRefresh.isRefreshing = false
+    }
+
     private fun setupShimmerEffect() {
         val shimmer = Shimmer.AlphaHighlightBuilder()
             .setDuration(1000)
@@ -102,15 +143,23 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showShimmer() {
-        shimmerLayout.visibility = View.VISIBLE
-        shimmerLayout.startShimmer()
-        binding.mainlayout.visibility = View.GONE
+        // Only show shimmer if not refreshing (to avoid conflict with SwipeRefreshLayout)
+        if (!isRefreshing) {
+            shimmerLayout.visibility = View.VISIBLE
+            shimmerLayout.startShimmer()
+            binding.mainlayout.visibility = View.GONE
+        }
     }
 
     private fun hideShimmer() {
         shimmerLayout.stopShimmer()
         shimmerLayout.visibility = View.GONE
         binding.mainlayout.visibility = View.VISIBLE
+
+        // Stop refresh indicator if it was refreshing
+        if (isRefreshing) {
+            stopRefreshing()
+        }
     }
 
     private val requestPermissionLauncher =
@@ -195,6 +244,7 @@ class MainActivity : AppCompatActivity() {
         }
         viewmodel.error.observe(this) { error ->
             Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
+            hideShimmer() // Make sure to hide shimmer on error
         }
     }
 
@@ -241,6 +291,7 @@ class MainActivity : AppCompatActivity() {
         }
         viewmodel.error.observe(this) { error ->
             Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
+            hideShimmer() // Make sure to hide shimmer on error
         }
     }
 
@@ -283,6 +334,7 @@ class MainActivity : AppCompatActivity() {
         }
         viewmodel.error.observe(this) { error ->
             Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
+            hideShimmer() // Make sure to hide shimmer on error
         }
     }
 
