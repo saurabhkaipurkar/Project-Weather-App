@@ -330,7 +330,7 @@ class MainActivity : AppCompatActivity() {
         viewmodel.airQuality.observe(this) { response ->
             val aqiValue = response.list[0].main.aqi
             val aqiDescription = getAQIDescription(aqiValue)
-            binding.AQIValue.text = "$aqiDescription($aqiValue)"
+            binding.AQIValue.text = getString(R.string.aqi_value, aqiDescription, aqiValue)
         }
         viewmodel.error.observe(this) { error ->
             Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
