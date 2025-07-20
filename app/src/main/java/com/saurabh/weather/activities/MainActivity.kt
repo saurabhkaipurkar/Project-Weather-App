@@ -60,9 +60,9 @@ class MainActivity : AppCompatActivity() {
         setupSwipeRefresh()
 
         // Initialize shimmer layout
-        val view = LayoutInflater.from(this).inflate(R.layout.skeleton_weather_screen, binding.mainlayout, false)
+        val view = LayoutInflater.from(this).inflate(R.layout.skeleton_weather_screen, binding.mainLayout, false)
         shimmerLayout = view.findViewById(R.id.shimmerLayout)
-        binding.mainlayout.addView(view)
+        binding.mainLayout.addView(view)
         setupShimmerEffect()
 
         val repository = WeatherRepository(RetrofitInstance.retrofit)
@@ -131,9 +131,9 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupShimmerEffect() {
         val shimmer = Shimmer.AlphaHighlightBuilder()
-            .setDuration(1000)
-            .setBaseAlpha(0.7f)
-            .setHighlightAlpha(0.9f)
+            .setDuration(1500)
+            .setBaseAlpha(1f)
+            .setHighlightAlpha(1f)
             .setDirection(Shimmer.Direction.LEFT_TO_RIGHT)
             .setAutoStart(true)
             .build()
@@ -147,14 +147,14 @@ class MainActivity : AppCompatActivity() {
         if (!isRefreshing) {
             shimmerLayout.visibility = View.VISIBLE
             shimmerLayout.startShimmer()
-            binding.mainlayout.visibility = View.GONE
+            binding.mainLayout.visibility = View.GONE
         }
     }
 
     private fun hideShimmer() {
         shimmerLayout.stopShimmer()
         shimmerLayout.visibility = View.GONE
-        binding.mainlayout.visibility = View.VISIBLE
+        binding.mainLayout.visibility = View.VISIBLE
 
         // Stop refresh indicator if it was refreshing
         if (isRefreshing) {
@@ -321,31 +321,20 @@ class MainActivity : AppCompatActivity() {
             "Thunderstorm" -> R.drawable.thunderstorm
             else -> R.drawable.sun
         }
-        binding.weathericon.visibility = View.VISIBLE
-        binding.weathericon.setImageResource(weatherIcon)
+        binding.weatherIcon.visibility = View.VISIBLE
+        binding.weatherIcon.setImageResource(weatherIcon)
     }
 
-    fun airQualityIndex(lat: Double, lon: Double) {
+    private fun airQualityIndex(lat: Double, lon: Double) {
         viewmodel.fetchAirQuality(lat, lon)
         viewmodel.airQuality.observe(this) { response ->
             val aqiValue = response.list[0].main.aqi
-            val aqiDescription = getAQIDescription(aqiValue)
-            binding.AQIValue.text = getString(R.string.aqi_value, aqiDescription, aqiValue)
+            val aqiDescription = toolbox.getAQIDescription(aqiValue)
+            binding.AQIValue.text = String.format(Locale.getDefault(), "AQI: %d (%s)", aqiValue,aqiDescription)
         }
         viewmodel.error.observe(this) { error ->
             Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
             hideShimmer() // Make sure to hide shimmer on error
-        }
-    }
-
-    private fun getAQIDescription(aqi: Int): String {
-        return when (aqi) {
-            1 -> "Good"
-            2 -> "Fair"
-            3 -> "Moderate"
-            4 -> "Poor"
-            5 -> "Very Poor"
-            else -> "Unknown"
         }
     }
 }

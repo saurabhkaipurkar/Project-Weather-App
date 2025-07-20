@@ -16,7 +16,7 @@
 
         <!-- Main content with ConstraintLayout as root -->
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/mainlayout"
+            android:id="@+id/mainLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="gone"
@@ -163,17 +163,15 @@
 
                             <ImageView
                                 android:visibility="gone"
-                                android:id="@+id/weathericon"
+                                android:id="@+id/weatherIcon"
                                 android:layout_width="80dp"
                                 android:layout_height="80dp"
                                 android:layout_marginStart="20dp"
                                 android:contentDescription="@string/weather_img"
-                                android:src="@drawable/weather_icon_enhanced"
                                 android:scaleType="fitCenter"
                                 app:layout_constraintBottom_toBottomOf="@id/mainTemp"
                                 app:layout_constraintStart_toEndOf="@id/mainTemp"
-                                app:layout_constraintTop_toTopOf="@id/mainTemp"
-                                app:tint="@color/weather_icon_color" />
+                                app:layout_constraintTop_toTopOf="@id/mainTemp"/>
 
                             <TextView
                                 android:id="@+id/maxandminTemp"
