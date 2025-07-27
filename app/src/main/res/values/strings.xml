@@ -21,7 +21,7 @@
     <string name="AQI_value">AQI</string>
     <string name="weather_img">Weather_Img</string>
     <string name="stateName">State</string>
-    <string name="_3_hour_forecast">3 Hour Forecast</string>
+    <string name="_3_hour_forecast">3 Hour Forecast(Your City)</string>
     <string name="aqi_value">%1$s (%2$d)</string>
     <string name="time_period">Time period</string>
     <string name="max_temp">max_temp</string>
