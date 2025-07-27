@@ -14,6 +14,7 @@ import kotlinx.coroutines.launch
 class WeatherViewmodel(private val repository: WeatherRepository) : ViewModel() {
 
     //===============Common Error Variable==========================================
+
     private val _error = MutableLiveData<String>()
     val error: LiveData<String> = _error
 
