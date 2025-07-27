@@ -23,4 +23,7 @@
     <string name="stateName">State</string>
     <string name="_3_hour_forecast">3 Hour Forecast</string>
     <string name="aqi_value">%1$s (%2$d)</string>
+    <string name="time_period">Time period</string>
+    <string name="max_temp">max_temp</string>
+    <string name="min_temp">min_temp</string>
 </resources>
