@@ -168,9 +168,7 @@ class MainActivity : AppCompatActivity() {
                 permissions[Manifest.permission.ACCESS_COARSE_LOCATION] == true
             ) {
                 getUserLocation()
-                Toast.makeText(this, "Permission Granted", Toast.LENGTH_LONG).show()
             } else {
-                Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show()
                 // Even if permission is denied, we can show some default data
                 hideShimmer()
             }
