@@ -5,11 +5,12 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.saurabh.weather.apiservices.WeatherDao
+import com.saurabh.weather.models.AqiEntity
 import com.saurabh.weather.models.ForecastEntity
 import com.saurabh.weather.models.WeatherEntity
 
 @Database(
-    entities = [WeatherEntity::class, ForecastEntity::class],
+    entities = [WeatherEntity::class, ForecastEntity::class, AqiEntity::class],
     version = 1,
     exportSchema = false
 )

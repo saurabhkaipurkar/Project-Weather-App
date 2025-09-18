@@ -5,6 +5,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import com.saurabh.weather.models.AqiEntity
 import com.saurabh.weather.models.ForecastEntity
 import com.saurabh.weather.models.WeatherEntity
 
@@ -25,4 +26,11 @@ interface WeatherDao {
 
     @Query("SELECT * FROM forecast_table ORDER BY dateTime ASC")
     fun getForecastForCity(): LiveData<List<ForecastEntity>>
+
+    // AQI
+    @Query("SELECT * FROM AQI_table ORDER BY id DESC LIMIT 1")
+    fun getLatestAqi(): LiveData<AqiEntity>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAqi(aqi: AqiEntity)
 }

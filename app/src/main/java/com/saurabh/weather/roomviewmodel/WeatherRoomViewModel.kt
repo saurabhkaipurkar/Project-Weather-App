@@ -1,10 +1,9 @@
 package com.saurabh.weather.roomviewmodel
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
+import com.saurabh.weather.models.AqiEntity
 import com.saurabh.weather.models.ForecastEntity
 import com.saurabh.weather.models.WeatherEntity
 import com.saurabh.weather.roomrepository.WeatherRoomRepository
@@ -25,4 +24,10 @@ class WeatherRoomViewModel(private val repository: WeatherRoomRepository) : View
     fun getForecast(): LiveData<List<ForecastEntity>> {
         return repository.getForecast()
     }
+
+    fun insertAqi(aqi: AqiEntity) = viewModelScope.launch {
+        repository.insertAqi(aqi)
+    }
+
+    val latestAqi: LiveData<AqiEntity> = repository.latestAqi
 }

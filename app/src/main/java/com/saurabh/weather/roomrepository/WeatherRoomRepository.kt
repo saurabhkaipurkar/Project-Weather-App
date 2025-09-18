@@ -2,6 +2,7 @@ package com.saurabh.weather.roomrepository
 
 import androidx.lifecycle.LiveData
 import com.saurabh.weather.apiservices.WeatherDao
+import com.saurabh.weather.models.AqiEntity
 import com.saurabh.weather.models.ForecastEntity
 import com.saurabh.weather.models.WeatherEntity
 
@@ -20,4 +21,10 @@ class WeatherRoomRepository(private val dao: WeatherDao) {
     fun getForecast(): LiveData<List<ForecastEntity>> {
         return dao.getForecastForCity()
     }
+
+    suspend fun insertAqi(aqi: AqiEntity) {
+        dao.insertAqi(aqi)
+    }
+
+    val latestAqi: LiveData<AqiEntity> = dao.getLatestAqi()
 }

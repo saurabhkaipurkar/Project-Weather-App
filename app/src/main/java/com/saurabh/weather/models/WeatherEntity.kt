@@ -20,5 +20,4 @@ data class WeatherEntity(
     val minTemp: Double?,
     val feelsLike: Double?,
     val icon: String?,
-    val aqi: String?
 )
