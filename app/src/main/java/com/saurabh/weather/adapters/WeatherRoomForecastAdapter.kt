@@ -43,9 +43,10 @@ class WeatherRoomForecastAdapter(private val data: List<ForecastEntity>
 
         @RequiresApi(Build.VERSION_CODES.O)
         fun bind(forecastItem: ForecastEntity) {
-            binding.dayOfWeek.text = toolBox.timeStampConvertor(forecastItem.dateTime)
-            binding.highTemp.text = "${toolBox.kelvinToCelsius(forecastItem.maxTemp)} °C"
-            binding.lowTemp.text = "${toolBox.kelvinToCelsius(forecastItem.minTemp)} °C"
+            binding.dayOfWeek.text = toolBox.timeStampConvertor(forecastItem.dateTime!!)
+            binding.highTemp.text = "${toolBox.kelvinToCelsius(forecastItem.maxTemp!!)} °C"
+            binding.lowTemp.text = "${toolBox.kelvinToCelsius(forecastItem.minTemp!!)} °C"
+
             val weatherIcon = when (forecastItem.icon) {
                 "Clouds" -> R.drawable.clouds
                 "Clear" -> R.drawable.sun

@@ -68,4 +68,11 @@
     <color name="shimmer_base_color_dark">#2C2C2C</color>
     <color name="shimmer_highlight_color_dark">#3C3C3C</color>
     <color name="shimmer_stroke_color_dark">#404040</color>
+
+    <color name="good">#4CAF50</color>          <!-- Green -->
+    <color name="fair">#8BC34A</color>          <!-- Light Green -->
+    <color name="moderate">#FFEB3B</color>      <!-- Yellow -->
+    <color name="poor">#FF9800</color>          <!-- Orange -->
+    <color name="very_poor">#F44336</color>     <!-- Red -->
+    <color name="unknown">#9E9E9E</color>
 </resources>

@@ -17,6 +17,7 @@ import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.facebook.shimmer.Shimmer
@@ -55,6 +56,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var adapter: WeatherForecastAdapter
     private lateinit var adapterRoom: WeatherRoomForecastAdapter
     private val toolbox = MethodLibrary()
+    private var valuePlusDescription: String = ""
     private var isRefreshing = false // Track refresh state
 
     private val weatherRoomViewModel : WeatherRoomViewModel by viewModels {
@@ -75,16 +77,18 @@ class MainActivity : AppCompatActivity() {
                     // Show cached data in UI
                     binding.cityName.text = "${cachedWeather.cityName},"
                     binding.stateName.text = cachedWeather.stateName
-                    binding.mainTemp.text = "${toolbox.kelvinToCelsius(cachedWeather.temperature)}°C"
+                    binding.mainTemp.text = "${toolbox.kelvinToCelsius(cachedWeather.temperature!!)}°C"
                     binding.skydispcrit.text = cachedWeather.description
                     binding.humidityValue.text = "${cachedWeather.humidity} %"
-                    binding.windspeed.text = String.format(Locale.getDefault(), "%.1f km/h", cachedWeather.windSpeed * 3.6)
+                    binding.windspeed.text = String.format(Locale.getDefault(), "%.1f km/h", cachedWeather.windSpeed?.times(3.6)
+                    )
                     binding.pressureValue.text = cachedWeather.pressure.toString()
                     binding.cloudsValue.text = cachedWeather.clouds.toString()
-                    binding.visibilityValue.text = "${cachedWeather.visibility / 1000} Km"
-                    binding.feelsLike.text = "Feels Like ${toolbox.kelvinToCelsius(cachedWeather.feelsLike)} °C"
-                    binding.maxandminTemp.text = "Max ${toolbox.kelvinToCelsius(cachedWeather.maxTemp)} °C | Min ${toolbox.kelvinToCelsius(cachedWeather.minTemp)} °C"
-                    binding.weatherIcon.setImageResource(toolbox.getWeatherIcon(cachedWeather.icon))
+                    binding.visibilityValue.text = "${cachedWeather.visibility?.div(1000)} Km"
+                    binding.feelsLike.text = "Feels Like ${toolbox.kelvinToCelsius(cachedWeather.feelsLike!!)} °C"
+                    binding.maxandminTemp.text = "Max ${toolbox.kelvinToCelsius(cachedWeather.maxTemp!!)} °C | Min ${toolbox.kelvinToCelsius(cachedWeather.minTemp!!)} °C"
+                    binding.weatherIcon.setImageResource(toolbox.getWeatherIcon(cachedWeather.icon!!))
+                    binding.AQIValue.text = valuePlusDescription
                     // ✅ hide shimmer if no internet
                     hideShimmer()
                 }
@@ -308,7 +312,8 @@ class MainActivity : AppCompatActivity() {
                 feelsLike = getData.main.feels_like,
                 maxTemp = getData.main.temp_max,
                 minTemp = getData.main.temp_min,
-                icon = getData.weather[0].main
+                icon = getData.weather[0].main,
+                aqi = valuePlusDescription
             )
             weatherRoomViewModel.insertWeather(entity)
 
@@ -396,13 +401,42 @@ class MainActivity : AppCompatActivity() {
     private fun airQualityIndex(lat: Double, lon: Double) {
         viewmodel.fetchAirQuality(lat, lon)
         viewmodel.airQuality.observe(this) { response ->
-            val aqiValue = response.list[0].main.aqi
-            val aqiDescription = toolbox.getAQIDescription(aqiValue)
-            binding.AQIValue.text = String.format(Locale.getDefault(), "AQI: %d (%s)", aqiValue,aqiDescription)
+            // Safety check for empty list
+            if (response.list.isNotEmpty()) {
+                val aqiValue = response.list[0].main.aqi
+                val aqiDescription = toolbox.getAQIDescription(aqiValue)
 
+                // Set text and color
+                binding.AQIValue.text = String.format(Locale.getDefault(), "AQI: %d (%s)", aqiValue, aqiDescription)
+                binding.AQIValue.setTextColor(getAqiColor(aqiValue))
+
+                // Store for later use if needed
+                valuePlusDescription = binding.AQIValue.text.toString()
+            } else {
+                // Handle empty response
+                binding.AQIValue.text = "AQI: N/A"
+                binding.AQIValue.setTextColor(ContextCompat.getColor(this, R.color.unknown))
+            }
         }
+
         viewmodel.error.observe(this) { error ->
-            hideShimmer() // Make sure to hide shimmer on error
+            hideShimmer()
+            // Optionally show error state
+            binding.AQIValue.text = "AQI: Error"
+            binding.AQIValue.setTextColor(ContextCompat.getColor(this, R.color.unknown))
         }
+    }
+
+    // Extract color logic to separate function for reusability
+    private fun getAqiColor(aqiValue: Int): Int {
+        val colorRes = when (aqiValue) {
+            1 -> R.color.good
+            2 -> R.color.fair
+            3 -> R.color.moderate
+            4 -> R.color.poor
+            5 -> R.color.very_poor
+            else -> R.color.unknown
+        }
+        return ContextCompat.getColor(this, colorRes)
     }
 }
