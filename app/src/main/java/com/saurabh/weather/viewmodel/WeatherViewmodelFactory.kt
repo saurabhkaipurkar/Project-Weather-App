@@ -9,6 +9,7 @@ class WeatherViewmodelFactory(private val repository: WeatherRepository) : ViewM
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
 
         if (modelClass.isAssignableFrom(WeatherViewmodel::class.java)){
+            @Suppress("UNCHECKED_CAST")
             return WeatherViewmodel(repository) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")

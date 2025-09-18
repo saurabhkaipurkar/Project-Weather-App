@@ -13,6 +13,7 @@ import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -28,10 +29,16 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
 import com.saurabh.weather.R
 import com.saurabh.weather.adapters.WeatherForecastAdapter
+import com.saurabh.weather.adapters.WeatherRoomForecastAdapter
 import com.saurabh.weather.apiservices.RetrofitInstance
 import com.saurabh.weather.databinding.ActivityMainBinding
+import com.saurabh.weather.models.ForecastEntity
+import com.saurabh.weather.models.WeatherEntity
 import com.saurabh.weather.models.WeatherResponse
 import com.saurabh.weather.repository.WeatherRepository
+import com.saurabh.weather.roomapp.RoomApp
+import com.saurabh.weather.roomviewmodel.WeatherRoomViewModel
+import com.saurabh.weather.roomviewmodel.WeatherRoomViewModelFactory
 import com.saurabh.weather.utils.MethodLibrary
 import com.saurabh.weather.viewmodel.WeatherViewmodel
 import com.saurabh.weather.viewmodel.WeatherViewmodelFactory
@@ -46,8 +53,13 @@ class MainActivity : AppCompatActivity() {
     private lateinit var getData: WeatherResponse
     private lateinit var shimmerLayout: ShimmerFrameLayout
     private lateinit var adapter: WeatherForecastAdapter
+    private lateinit var adapterRoom: WeatherRoomForecastAdapter
     private val toolbox = MethodLibrary()
     private var isRefreshing = false // Track refresh state
+
+    private val weatherRoomViewModel : WeatherRoomViewModel by viewModels {
+        WeatherRoomViewModelFactory((application as RoomApp).repository)
+    }
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,6 +67,34 @@ class MainActivity : AppCompatActivity() {
         enableEdgeToEdge()
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        if(!toolbox.isInternetAvailable(this)){
+            // Observe cached weather (latest entry)
+            weatherRoomViewModel.latestWeather.observe(this) { cachedWeather ->
+                if (cachedWeather != null) {
+                    // Show cached data in UI
+                    binding.cityName.text = "${cachedWeather.cityName},"
+                    binding.stateName.text = cachedWeather.stateName
+                    binding.mainTemp.text = "${toolbox.kelvinToCelsius(cachedWeather.temperature)}°C"
+                    binding.skydispcrit.text = cachedWeather.description
+                    binding.humidityValue.text = "${cachedWeather.humidity} %"
+                    binding.windspeed.text = String.format(Locale.getDefault(), "%.1f km/h", cachedWeather.windSpeed * 3.6)
+                    binding.pressureValue.text = cachedWeather.pressure.toString()
+                    binding.cloudsValue.text = cachedWeather.clouds.toString()
+                    binding.visibilityValue.text = "${cachedWeather.visibility / 1000} Km"
+                    binding.feelsLike.text = "Feels Like ${toolbox.kelvinToCelsius(cachedWeather.feelsLike)} °C"
+                    binding.maxandminTemp.text = "Max ${toolbox.kelvinToCelsius(cachedWeather.maxTemp)} °C | Min ${toolbox.kelvinToCelsius(cachedWeather.minTemp)} °C"
+                    binding.weatherIcon.setImageResource(toolbox.getWeatherIcon(cachedWeather.icon))
+                    // ✅ hide shimmer if no internet
+                    hideShimmer()
+                }
+            }
+            weatherRoomViewModel.getForecast().observe(this){response->
+                adapterRoom = WeatherRoomForecastAdapter(response)
+                binding.forecastHour.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+                binding.forecastHour.adapter = adapterRoom
+            }
+        }
 
         // Setup SwipeRefreshLayout
         setupSwipeRefresh()
@@ -69,7 +109,7 @@ class MainActivity : AppCompatActivity() {
         val factory = WeatherViewmodelFactory(repository)
         viewmodel = ViewModelProvider(this, factory)[WeatherViewmodel::class.java]
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-        locationRequest = LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 5000).build()
+        locationRequest = LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 15000).build()
         locationFinder()
         requestPermission()
 
@@ -241,7 +281,6 @@ class MainActivity : AppCompatActivity() {
             binding.stateName.text = response[0].state
         }
         viewmodel.error.observe(this) { error ->
-            Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
             hideShimmer() // Make sure to hide shimmer on error
         }
     }
@@ -254,11 +293,29 @@ class MainActivity : AppCompatActivity() {
             updateUI(getData)
             weatherIconChanger(getData)
             takeStateData(getData.name)
+
+            val entity = WeatherEntity(
+                cityName = getData.name,
+                stateName = binding.stateName.text.toString(), // or from API
+                temperature = getData.main.temp,
+                description = getData.weather[0].description,
+                humidity = getData.main.humidity,
+                windSpeed = getData.wind.speed,
+                pressure = getData.main.pressure,
+                dateTime = System.currentTimeMillis(),
+                clouds = getData.clouds.all,
+                visibility = getData.visibility,
+                feelsLike = getData.main.feels_like,
+                maxTemp = getData.main.temp_max,
+                minTemp = getData.main.temp_min,
+                icon = getData.weather[0].main
+            )
+            weatherRoomViewModel.insertWeather(entity)
+
             hideShimmer()
         }
         viewmodel.error.observe(this) { error ->
             hideShimmer()
-            Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -275,20 +332,33 @@ class MainActivity : AppCompatActivity() {
         }
         viewmodel.error.observe(this) { cityError ->
             hideShimmer()
-            Toast.makeText(this, cityError, Toast.LENGTH_SHORT).show()
         }
     }
 
     private fun takeForecastData(lat: Double, lon: Double) {
         viewmodel.fetchForecast(lat, lon)
         viewmodel.forecast.observe(this) { response ->
+            val forecastList = response.list
+            val forecastEntities = forecastList.map {
+                ForecastEntity(
+                    lat = response.city.coord.lat,
+                    lon = response.city.coord.lon,
+                    cityName = response.city.name,
+                    dateTime = it.dt,
+                    temperature = it.main.temp,
+                    maxTemp = it.main.tempMax,
+                    minTemp = it.main.tempMin,
+                    icon = it.weather[0].main
+                )
+            }
+            weatherRoomViewModel.insertForecast(forecastEntities)
             adapter = WeatherForecastAdapter(response)
             binding.forecastHour.layoutManager =
                 LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
             binding.forecastHour.adapter = adapter
+
         }
         viewmodel.error.observe(this) { error ->
-            Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
             hideShimmer() // Make sure to hide shimmer on error
         }
     }
@@ -329,9 +399,9 @@ class MainActivity : AppCompatActivity() {
             val aqiValue = response.list[0].main.aqi
             val aqiDescription = toolbox.getAQIDescription(aqiValue)
             binding.AQIValue.text = String.format(Locale.getDefault(), "AQI: %d (%s)", aqiValue,aqiDescription)
+
         }
         viewmodel.error.observe(this) { error ->
-            Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
             hideShimmer() // Make sure to hide shimmer on error
         }
     }
