@@ -6,11 +6,11 @@ plugins {
 }
 
 android {
-    namespace = "com.saurabh.weather"
+    namespace = "com.hsappcreators.weather"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.saurabh.weather"
+        applicationId = "com.hsappcreators.weather"
         minSdk = 24
         targetSdk = 36
         versionCode = 1
@@ -65,6 +65,7 @@ dependencies {
 
     implementation (libs.shimmer)
     implementation(libs.androidx.swiperefreshlayout)
+    implementation("com.airbnb.android:lottie:6.7.1")
 
     val room_version = "2.6.1"
     implementation("androidx.room:room-runtime:$room_version")
