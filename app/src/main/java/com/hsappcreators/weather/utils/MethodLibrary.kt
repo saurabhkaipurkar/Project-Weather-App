@@ -6,11 +6,14 @@ import android.net.NetworkCapabilities
 import android.os.Build
 import androidx.annotation.RequiresApi
 import com.hsappcreators.weather.R
+import dagger.hilt.android.qualifiers.ActivityContext
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import javax.inject.Inject
 
-class MethodLibrary {
+class MethodLibrary
+@Inject constructor(@param:ActivityContext private val context: Context){
     @RequiresApi(Build.VERSION_CODES.O)
     fun timeStampConvertor(timeStamp: Long): String {
         val sourceZone = ZoneId.of("UTC")
@@ -45,7 +48,7 @@ class MethodLibrary {
         }
     }
 
-    fun isInternetAvailable(context: Context): Boolean {
+    fun isInternetAvailable(): Boolean {
         val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val network = cm.activeNetwork ?: return false
         val activeNetwork = cm.getNetworkCapabilities(network) ?: return false

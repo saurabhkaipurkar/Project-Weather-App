@@ -1,5 +1,6 @@
 package com.hsappcreators.weather.adapters
 
+import android.annotation.SuppressLint
 import android.os.Build
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -10,15 +11,21 @@ import com.hsappcreators.weather.databinding.HourlyForecastBinding
 import com.hsappcreators.weather.models.ForecastEntity
 import com.hsappcreators.weather.utils.MethodLibrary
 
-class WeatherRoomForecastAdapter(private val data: List<ForecastEntity>
+class WeatherRoomForecastAdapter(
+    private val data: List<ForecastEntity>,
+    private val toolBox: MethodLibrary
 ) : RecyclerView.Adapter<WeatherRoomForecastAdapter.WeatherRoomForecastViewHolder>() {
-
-    private val toolBox = MethodLibrary()
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
     ): WeatherRoomForecastViewHolder {
-       return WeatherRoomForecastViewHolder(HourlyForecastBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+        return WeatherRoomForecastViewHolder(
+            HourlyForecastBinding.inflate(
+                LayoutInflater.from(
+                    parent.context
+                ), parent, false
+            )
+        )
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -35,15 +42,17 @@ class WeatherRoomForecastAdapter(private val data: List<ForecastEntity>
     }
 
 
-    inner class WeatherRoomForecastViewHolder(private val binding : HourlyForecastBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class WeatherRoomForecastViewHolder(private val binding: HourlyForecastBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
+        @SuppressLint("SetTextI18n")
         @RequiresApi(Build.VERSION_CODES.O)
-        fun bind(forecastItem: ForecastEntity) {
-            binding.dayOfWeek.text = toolBox.timeStampConvertor(forecastItem.dateTime!!)
-            binding.highTemp.text = "${toolBox.kelvinToCelsius(forecastItem.maxTemp!!)} °C"
-            binding.lowTemp.text = "${toolBox.kelvinToCelsius(forecastItem.minTemp!!)} °C"
+        fun bind(forecastItem: ForecastEntity) = with(binding) {
+            dayOfWeek.text = toolBox.timeStampConvertor(forecastItem.dateTime!!)
+            highTemp.text = "${toolBox.kelvinToCelsius(forecastItem.maxTemp!!)} °C"
+            lowTemp.text = "${toolBox.kelvinToCelsius(forecastItem.minTemp!!)} °C"
 
-            val weatherIcon = when (forecastItem.icon) {
+            val weatherImage = when (forecastItem.icon) {
                 "Clouds" -> R.drawable.clouds
                 "Clear" -> R.drawable.sun
                 "Rain" -> R.drawable.rain
@@ -51,7 +60,7 @@ class WeatherRoomForecastAdapter(private val data: List<ForecastEntity>
                 "Thunderstorm" -> R.drawable.thunderstorm
                 else -> R.drawable.sun
             }
-            binding.weatherIcon.setImageResource(weatherIcon)
+            weatherIcon.setImageResource(weatherImage)
         }
     }
 }

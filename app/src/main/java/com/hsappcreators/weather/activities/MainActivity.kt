@@ -6,6 +6,7 @@ import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
@@ -37,15 +38,18 @@ import com.hsappcreators.weather.models.ForecastEntity
 import com.hsappcreators.weather.models.WeatherEntity
 import com.hsappcreators.weather.models.WeatherResponse
 import com.hsappcreators.weather.repository.WeatherRepository
-import com.hsappcreators.weather.roomapp.RoomApp
+import com.hsappcreators.weather.application.MyWeatherApp
 import com.hsappcreators.weather.roomviewmodel.WeatherRoomViewModel
 import com.hsappcreators.weather.roomviewmodel.WeatherRoomViewModelFactory
 import com.hsappcreators.weather.utils.MethodLibrary
 import com.hsappcreators.weather.viewmodel.WeatherViewmodel
 import com.hsappcreators.weather.viewmodel.WeatherViewmodelFactory
 import com.hsappcreators.weather.databinding.ActivityMainBinding
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var fusedLocationClient: FusedLocationProviderClient
@@ -56,14 +60,16 @@ class MainActivity : AppCompatActivity() {
     private lateinit var shimmerLayout: ShimmerFrameLayout
     private lateinit var adapter: WeatherForecastAdapter
     private lateinit var adapterRoom: WeatherRoomForecastAdapter
-    private val toolbox = MethodLibrary()
+    @Inject
+    lateinit var toolbox : MethodLibrary
     private var isRefreshing = false // Track refresh state
     private var valuePlusDescription: String = ""
 
     private val weatherRoomViewModel : WeatherRoomViewModel by viewModels {
-        WeatherRoomViewModelFactory((application as RoomApp).repository)
+        WeatherRoomViewModelFactory((application as MyWeatherApp).repository)
     }
 
+    @SuppressLint("SetTextI18n")
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,27 +77,30 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        if(!toolbox.isInternetAvailable(this)){
+        if(!toolbox.isInternetAvailable()){
             // Observe cached weather (latest entry)
             weatherRoomViewModel.latestWeather.observe(this) { cachedWeather ->
                 if (cachedWeather != null) {
+                    with(binding){
+                        cityName.text = "${cachedWeather.cityName},"
+                        stateName.text = cachedWeather.stateName
+                        mainTemp.text = "${toolbox.kelvinToCelsius(cachedWeather.temperature!!)}°C"
+                        skydispcrit.text = cachedWeather.description
+                        humidityValue.text = "${cachedWeather.humidity} %"
+                        windspeed.text = String.format(Locale.getDefault(), "%.1f km/h", cachedWeather.windSpeed?.times(3.6))
+
+                        pressureValue.text = cachedWeather.pressure.toString()
+                        cloudsValue.text = cachedWeather.clouds.toString()
+                        visibilityValue.text = "${cachedWeather.visibility?.div(1000)} Km"
+                        feelsLike.text = "Feels Like ${toolbox.kelvinToCelsius(cachedWeather.feelsLike!!)} °C"
+                        maxandminTemp.text = "Max ${toolbox.kelvinToCelsius(cachedWeather.maxTemp!!)} °C | Min ${toolbox.kelvinToCelsius(cachedWeather.minTemp!!)} °C"
+                        weatherIcon.visibility = View.VISIBLE
+                        weatherIcon.setImageResource(toolbox.getWeatherIcon(cachedWeather.icon!!))
+                        // ✅ hide shimmer if no internet
+                        hideShimmer()
+
+                    }
                     // Show cached data in UI
-                    binding.cityName.text = "${cachedWeather.cityName},"
-                    binding.stateName.text = cachedWeather.stateName
-                    binding.mainTemp.text = "${toolbox.kelvinToCelsius(cachedWeather.temperature!!)}°C"
-                    binding.skydispcrit.text = cachedWeather.description
-                    binding.humidityValue.text = "${cachedWeather.humidity} %"
-                    binding.windspeed.text = String.format(Locale.getDefault(), "%.1f km/h", cachedWeather.windSpeed?.times(3.6)
-                    )
-                    binding.pressureValue.text = cachedWeather.pressure.toString()
-                    binding.cloudsValue.text = cachedWeather.clouds.toString()
-                    binding.visibilityValue.text = "${cachedWeather.visibility?.div(1000)} Km"
-                    binding.feelsLike.text = "Feels Like ${toolbox.kelvinToCelsius(cachedWeather.feelsLike!!)} °C"
-                    binding.maxandminTemp.text = "Max ${toolbox.kelvinToCelsius(cachedWeather.maxTemp!!)} °C | Min ${toolbox.kelvinToCelsius(cachedWeather.minTemp!!)} °C"
-                    binding.weatherIcon.visibility = View.VISIBLE
-                    binding.weatherIcon.setImageResource(toolbox.getWeatherIcon(cachedWeather.icon!!))
-                    // ✅ hide shimmer if no internet
-                    hideShimmer()
                 }
             }
 
@@ -102,7 +111,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             weatherRoomViewModel.getForecast().observe(this){response->
-                adapterRoom = WeatherRoomForecastAdapter(response)
+                adapterRoom = WeatherRoomForecastAdapter(response,toolbox)
                 binding.forecastHour.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
                 binding.forecastHour.adapter = adapterRoom
             }
@@ -342,7 +351,7 @@ class MainActivity : AppCompatActivity() {
             binding.searchCity.text?.clear()
             hideShimmer()
         }
-        viewmodel.error.observe(this) { cityError ->
+        viewmodel.error.observe(this) {
             hideShimmer()
         }
     }
@@ -364,7 +373,7 @@ class MainActivity : AppCompatActivity() {
                 )
             }
             weatherRoomViewModel.insertForecast(forecastEntities)
-            adapter = WeatherForecastAdapter(response)
+            adapter = WeatherForecastAdapter(response,toolbox)
             binding.forecastHour.layoutManager =
                 LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
             binding.forecastHour.adapter = adapter
@@ -377,19 +386,19 @@ class MainActivity : AppCompatActivity() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("SetTextI18n")
-    private fun updateUI(getData: WeatherResponse) {
-        binding.cityName.text = "${getData.name}, "
-        binding.mainTemp.text = toolbox.kelvinToCelsius(getData.main.temp).toString() + "°C"
-        binding.maxandminTemp.text =
+    private fun updateUI(getData: WeatherResponse) = with(binding) {
+        cityName.text = "${getData.name}, "
+        mainTemp.text = toolbox.kelvinToCelsius(getData.main.temp).toString() + "°C"
+        maxandminTemp.text =
             "Max " + toolbox.kelvinToCelsius(getData.main.temp_max) + "°C" + " | " +
                     "Min " + toolbox.kelvinToCelsius(getData.main.temp_min) + "°C"
-        binding.skydispcrit.text = getData.weather[0].description
-        binding.feelsLike.text = "Feel Like ${toolbox.kelvinToCelsius(getData.main.feels_like)} °C"
-        binding.humidityValue.text = "${getData.main.humidity} °C"
-        binding.cloudsValue.text = getData.clouds.all.toString() + "%"
-        binding.visibilityValue.text = "${getData.visibility / 1000} Km"
-        binding.windspeed.text = String.format(Locale.getDefault(), "%.1f km/h", getData.wind.speed * 3.6)
-        binding.pressureValue.text = getData.main.pressure.toString()
+        skydispcrit.text = getData.weather[0].description
+        feelsLike.text = "Feel Like ${toolbox.kelvinToCelsius(getData.main.feels_like)} °C"
+        humidityValue.text = "${getData.main.humidity} °C"
+        cloudsValue.text = getData.clouds.all.toString() + "%"
+        visibilityValue.text = "${getData.visibility / 1000} Km"
+        windspeed.text = String.format(Locale.getDefault(), "%.1f km/h", getData.wind.speed * 3.6)
+        pressureValue.text = getData.main.pressure.toString()
     }
 
     private fun weatherIconChanger(getData: WeatherResponse) {
